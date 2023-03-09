@@ -36,12 +36,12 @@ class Graph:
             Distance between node1 and node2 on the edge. Default is 1.
         """
         #checking if nodes are in the graph, adding them if not
-        if node1 in self.graph:
-            self.graphe[node1].append([])
-            self.nb_nodes += 1
-        if node2 in self.graph:
-            self.graphe[node2].append([])
-            self.nb_nodes += 1
+        if node1 not in self.graph:
+            self.graph[node1].append([])
+            #########self.nb_nodes += 1
+        if node2 not in self.graph:
+            self.graph[node2].append([])
+            ########self.nb_nodes += 1
         # edge addition
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
@@ -210,7 +210,7 @@ class Graph:
             edges_power = zip(*self.graph[n[0]])[2]
             for p in edges_power:
                 powers.append(p)
-        powers = list(set(powers))).sort()
+        powers = list(set(powers)).sort()
         # Dichotomic research
         i = 0
         j = len(powers)-1
@@ -268,19 +268,24 @@ class Graph:
         """
 
         graphe = open(filename, "r")
-        nm = graphe.readline().split(" ") #first line: number of nodes, number of edges
+        #nm = graphe.readline().split(" ") #first line: number of nodes, number of edges
+        nm = graphe.readline() #graphe.readline().split(" ")
+        nm = nm.split(" ")
         # assert len(nm) == 2 "wrong format of text file"
-        isinstance()
+        #isinstance() 
         n, m = map(int, nm)
-        # assert isinstance(n, int) "wrong format of text fiile"
-        G = Graph(list(range(n))) # initialization of graph
-        G.nb_edges = m 
+        # assert isinstance(n, int) "wrong format of text file"
+        G = Graph(list(range(n))) ######## initialization of graph
+        ######################G.nb_edges = m 
 
         E = graphe.readlines() 
         for edge in E: #filling G with specified edges
-            ar =list(map(int, edge.split("-")))
+            edge = ''.join(edge.splitlines()) ##### Bout touché
+            #ar =list(map(int, edge.split("-")))
+            ar =list(map(int, edge.split(" "))) ####J'ai modifié celui là aussi du coup
             if len(ar) == 4: # distance specified
-                G.add_edge(G, ar[0], ar[1], ar[2], ar[3])
+                 ############G.add_edge(G, ar[0], ar[1], ar[2], ar[3]) modifié
+                 G.add_edge(ar[0], ar[1], ar[2], ar[3])
             elif len(ar) == 3: # not specified
                 G.add_edge(ar[0], ar[1], ar[2])
         graphe.close()
