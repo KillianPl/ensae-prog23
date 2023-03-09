@@ -126,9 +126,11 @@ def graph_render(graph, popup = False):
     dot.render().replace('\\', '/', view=popup)
     return dot
 
+
 def path_render(graph, path, popup=False):
     '''Will build a graphviz graph and highlight a defined path upon'''
-    dot = gph.Digraph('Initial_graph', comment='Initial graph')
+
+    dot = gph.Digraph('Highlighted_graph', comment='Initial graph with path highlighted')
 
     for i in graph.nodes():
         if i in path:
@@ -148,3 +150,4 @@ def path_render(graph, path, popup=False):
         viewed.append(k)
 
     dot.render().replace('\\', '/', view=popup)
+
