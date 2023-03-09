@@ -123,4 +123,28 @@ def graph_render(graph, popup = False):
             viewed.append(n)
         viewed.append(k)
 
-    dot.render().replace('\\', '/',view=popup)
+    dot.render().replace('\\', '/', view=popup)
+    return dot
+
+def path_render(graph, path, popup=False):
+    '''Will build a graphviz graph and highlight a defined path upon'''
+    dot = gph.Digraph('Initial_graph', comment='Initial graph')
+
+    for i in graph.nodes():
+        if i in path:
+            dot.nodes(str(i), color = 'green')
+        else:
+            dot.nodes(str(i))
+    
+    viewed = []
+    for k in graph.keys():
+        for n in graph[k]:
+            if n not in viewed:
+                if k and n in path:
+                    dot.edge(str(k),str(n),color='green')
+                else:  
+                    dot.edge(str(k),str(n))
+            viewed.append(n)
+        viewed.append(k)
+
+    dot.render().replace('\\', '/', view=popup)
