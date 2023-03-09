@@ -1,3 +1,5 @@
+import graphviz as gph
+
 class Graph:
     """
     A class representing graphs as adjacency lists and implementing various algorithms on the graphs. Graphs in the class are not oriented. 
@@ -101,3 +103,24 @@ def graph_from_file(filename):
         An object of the class Graph with the graph from file_name.
     """
     raise NotImplementedError
+
+
+def graph_render(graph, popup = False):
+    '''Transform our initial graph as a graphviz friendly one
+    and then print it. In addition, "popup" will allow to control
+    if the render is automatically opened'''
+
+    dot = gph.Digraph('Initial_graph', comment='Initial graph')
+
+    for i in graph.nodes():
+        dot.nodes(str(i))
+    
+    viewed = []
+    for k in graph.keys():
+        for n in graph[k]:
+            if n not in viewed:
+                dot.edge(str(k),str(n))
+            viewed.append(n)
+        viewed.append(k)
+
+    dot.render().replace('\\', '/',view=popup)
