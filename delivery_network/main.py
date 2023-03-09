@@ -204,12 +204,14 @@ class Graph:
         #           Complexity is O(m + mlog(m) + nlog(p)) = O((n+m)log(m)) also
         #           with n : number of nodes ; m : number of edges
         #                p : number of distinct powers, p = O(m)
+        
         powers = []
         for n in self.nodes:
-            edges_p = zip(*self.graph[n[0]])[2]
-            for p in edges_p:
+            edges_power = zip(*self.graph[n[0]])[2]
+            for p in edges_power:
                 powers.append(p)
-        powers = sorted(list(set(powers)))
+        powers = list(set(powers))).sort()
+        # Dichotomic research
         i = 0
         j = len(powers)-1
         while i < j:
@@ -223,9 +225,10 @@ class Graph:
                 i = (i+j)//2
             else:
                 j = (i+j)//2
-
-        if not (get_path_with_power(self, src, dest, powers[i]) is None):
-            return get_path_with_power(self, src, dest, powers[i]), powers[i]        
+        
+        answer = get_path_with_power(self, src, dest, powers[i])
+        if not (answer is None):
+            return answer, powers[i]        
         
         
 
