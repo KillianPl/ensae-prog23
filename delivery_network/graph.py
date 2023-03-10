@@ -37,11 +37,13 @@ class Graph:
         """
         #checking if nodes are in the graph, adding them if not
         if node1 not in self.graph:
-            self.graph[node1].append([])
+            ########self.graph[node1].append([])
             #########self.nb_nodes += 1
+            self.graph[node1] = []
         if node2 not in self.graph:
-            self.graph[node2].append([])
+            ########self.graph[node2].append([])
             ########self.nb_nodes += 1
+            self.graph[node2] = []
         # edge addition
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
@@ -65,8 +67,8 @@ class Graph:
         """
         # recursive Deep First Search
         # does not return optimal path
-        seen = {(n, False) for n in self.nodes}
-        
+        ##### seen = {(n, False) for n in self.nodes}
+        seen = [(n, False) for n in self.nodes]
         def rec_path(position):
             if position == dest: 
                 return [dest]
@@ -155,21 +157,23 @@ class Graph:
         each one being a connected component    
         
         """
-        seen = {(n, False) for n in self.nodes}
+        ## seen = {(n, False) for n in self.nodes}
+        seen = [(n, False) for n in self.nodes]
         list_of_components = []
         for a in self.nodes:
-            if not seen(a):
+            if not seen[a][0] and a!=0 :#seen(a):
                 seen[a] = True
                 connected_component = [a]
                 # heap of nodes to add is just neighboors
                 # because if they had been seen before, a would also have been seen
-                to_add = list(zip(*self.graph[a])[0])
+                print(self.graph)
+                to_add = list(zip(self.graph[a]))[0] #list(zip(*self.graph[a])[0])
                 while to_add:
                     b = to_add.pop()
                     connected_component.append(b)
                     seen[b] = True
 
-                    for b_neighboor in  list(zip(*self.graph[b])[0]):
+                    for b_neighboor in  list(zip(*self.graph[b]))[0] : #list(zip(*self.graph[b])[0]):
                         if not seen[b_neighboor]:
                             # have to check if seen 
                             # (e.g. neighboor of b being neighboor of a already seen before)
@@ -177,6 +181,7 @@ class Graph:
 
                 list_of_components.append(connected_component)
         # Complexity O(n) where n is the number of nodes
+        print(list_of_components)
         return list_of_components
 
 
@@ -206,8 +211,9 @@ class Graph:
         #                p : number of distinct powers, p = O(m)
         
         powers = []
-        for n in self.nodes:
-            edges_power = zip(*self.graph[n[0]])[2]
+        for n in self.nodes :
+            print(self.graph[n])
+            edges_power = zip(self.graph[n])[2] #zip(*self.graph[n[0]])[2]
             for p in edges_power:
                 powers.append(p)
         powers = list(set(powers)).sort()
@@ -275,7 +281,7 @@ class Graph:
         #isinstance() 
         n, m = map(int, nm)
         # assert isinstance(n, int) "wrong format of text file"
-        G = Graph(list(range(n))) ######## initialization of graph
+        G = Graph(list(range(1, n+1))) ######## initialization of graph
         ######################G.nb_edges = m 
 
         E = graphe.readlines() 
