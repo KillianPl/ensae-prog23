@@ -37,12 +37,8 @@ class Graph:
         """
         #checking if nodes are in the graph, adding them if not
         if node1 not in self.graph:
-            ########self.graph[node1].append([])
-            #########self.nb_nodes += 1
             self.graph[node1] = []
         if node2 not in self.graph:
-            ########self.graph[node2].append([])
-            ########self.nb_nodes += 1
             self.graph[node2] = []
         # edge addition
         self.graph[node1].append((node2, power_min, dist))
@@ -67,24 +63,24 @@ class Graph:
         """
         # recursive Deep First Search
         # does not return optimal path
-        ##### seen = {(n, False) for n in self.nodes}
-        seen = [(n, False) for n in self.nodes]
+        seen = {} # edge (a, b) : True
         def rec_path(position):
             if position == dest: 
                 return [dest]
 
             neighbors = self.graph[position]
-             # Moving to neighboors
-            for n in neighbors:  # n : (node tag, power, dist)
-                if not seen[n[0]]:
-                    seen[n[0]] = True 
+            # Moving to neighboors
+            for n in neighbors:  # n = (node tag, power, dist)
+                if (position, n[0]) not in seen:
+                    seen[(position, n[0])] = True
+                    seen[(n[0], position)] = True
                     if n[1] < power: # moving through only admissible paths
-                        p = rec_path(n[0], dest) 
+                        p = rec_path(n[0]) 
                         if not(p is None):
                             p.append(position) 
                             return p
-
-        return rec_path(src)[::-1] #list had been constructed backwards because of recursion
+        print(rec_path(src))
+        return rec_path(src) #list had been constructed backwards because of recursion
 
         # Seance 1 Question 3:
         # TIME COMPLEXITY: 
@@ -157,28 +153,29 @@ class Graph:
         each one being a connected component    
         
         """
-        ## seen = {(n, False) for n in self.nodes}
-        seen = [(n, False) for n in self.nodes]
+        seen = {n: False for n in self.nodes}
+        #seen = [(n, False) for n in self.nodes]
         list_of_components = []
         for a in self.nodes:
-            if not seen[a][0] and a!=0 :#seen(a):
+            if not seen[a]:
                 seen[a] = True
                 connected_component = [a]
                 # heap of nodes to add is just neighboors
                 # because if they had been seen before, a would also have been seen
                 print(self.graph)
-                to_add = list(zip(self.graph[a]))[0] #list(zip(*self.graph[a])[0])
+
+                to_add = [] # remettre le zip
+                for b in self.graph[a]:
+                    to_add.append(b[0])
                 while to_add:
                     b = to_add.pop()
                     connected_component.append(b)
                     seen[b] = True
-
-                    for b_neighboor in  list(zip(*self.graph[b]))[0] : #list(zip(*self.graph[b])[0]):
-                        if not seen[b_neighboor]:
+                    for b_neighboor in self.graph[b]: #list(zip(*self.graph[b])[0]):
+                        if not seen[b_neighboor[0]]:
                             # have to check if seen 
                             # (e.g. neighboor of b being neighboor of a already seen before)
-                            to_add.append(b_neighboor)
-
+                            to_add.append(b_neighboor[0])
                 list_of_components.append(connected_component)
         # Complexity O(n) where n is the number of nodes
         print(list_of_components)
@@ -242,14 +239,6 @@ class Graph:
             """
             Returns the index of the edge with minimal power in the list edges 
             """
-            
-
-        def pmax(edges):
-            """
-            Returns the index of the edge with maximal power in the list edges 
-            """
-
-
 
     # no 'self' in args of method
     @staticmethod 
@@ -274,23 +263,17 @@ class Graph:
         """
 
         graphe = open(filename, "r")
-        #nm = graphe.readline().split(" ") #first line: number of nodes, number of edges
-        nm = graphe.readline() #graphe.readline().split(" ")
-        nm = nm.split(" ")
-        # assert len(nm) == 2 "wrong format of text file"
-        #isinstance() 
-        n, m = map(int, nm)
-        # assert isinstance(n, int) "wrong format of text file"
-        G = Graph(list(range(1, n+1))) ######## initialization of graph
-        ######################G.nb_edges = m 
+        first_line = graphe.readline().split(" ") #first line: number of nodes, number of edges
+        # assert len(nm) == 2 "wrong format of text file" test à implémenter 
+        n = int(first_line[0])
+        # assert isinstance(n, int) "wrong format of text file" test à implémenter
+        G = Graph(list(range(1, n+1))) #initialization of graph
 
         E = graphe.readlines() 
         for edge in E: #filling G with specified edges
-            edge = ''.join(edge.splitlines()) ##### Bout touché
-            #ar =list(map(int, edge.split("-")))
-            ar =list(map(int, edge.split(" "))) ####J'ai modifié celui là aussi du coup
+            edge = ''.join(edge.splitlines()) 
+            ar =list(map(int, edge.split(" ")))
             if len(ar) == 4: # distance specified
-                 ############G.add_edge(G, ar[0], ar[1], ar[2], ar[3]) modifié
                  G.add_edge(ar[0], ar[1], ar[2], ar[3])
             elif len(ar) == 3: # not specified
                 G.add_edge(ar[0], ar[1], ar[2])
