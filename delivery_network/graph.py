@@ -1,4 +1,5 @@
 import graphviz as gph
+from time import perf_counter
 
 class Graph:
 
@@ -342,3 +343,22 @@ def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     dot.render(view=popup).replace('\\', '/')
     print(type(dot))
     return dot
+
+def time_measure(function):
+    '''
+    This function allows us to measure in an easier way our program's performances by printing the elapsed time during 
+    function's work
+
+    Parameters:
+    -----------
+    function: function's output type
+        It takes a format like "function_analysed(paramaeter1,parameter2,...)"
+    
+    Outputs:
+    --------
+    None
+    '''
+    s = perf_counter()
+    function
+    e = perf_counter()
+    print("Your function was performed in",e-s,"s")
