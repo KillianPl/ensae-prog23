@@ -112,6 +112,11 @@ class Graph:
             Second end (node) of the edge
         power: numeric (int or float)
             power of the agent
+        
+        Outputs:
+        --------
+        best_path: List
+            A list which contains the optimal path ordered from source to destination
         """
         seen = {(n, False) for n in self.nodes}
         admissible_paths = [] # will contain tuples (ditance, path)
@@ -195,6 +200,16 @@ class Graph:
 
         """
         Returns path from src to dest with minimal power and the associated power 
+
+        Parameters:
+        -----------
+        src: NodeType
+            The source node
+        dest: NodeType
+            The destination node
+        
+        Outputs:
+        --------
         """
         #Solution 1: djikstra with power >= 0, 
         #           has too great space complexity O(n^2)
@@ -281,49 +296,49 @@ class Graph:
         return G
 
 
-def graph_render(graph, popup = False):
+def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     '''Transform our initial graph as a graphviz friendly one
-    and then print it. In addition, "popup" will allow to control
-    if the render is automatically opened'''
-
-    dot = gph.Digraph('Initial_graph', comment='Initial graph')
-
-    for i in graph.nodes():
-        dot.nodes(str(i))
+    and then print it. In addition, we are able to highlight a path upon the graph and "popup" will allow to manage
+    if the render is automatically opened
     
-    viewed = []
-    for k in graph.keys():
-        for n in graph[k]:
-            if n not in viewed:
-                dot.edge(str(k),str(n))
-            viewed.append(n)
-        viewed.append(k)
+    Parameters:
+    -----------
+    graph: Graph (class defined earlier)
+        It's the graph we want to work on
+    popup: bool
+        Allow to control if the render in immediately opened (not so relevant on sspcloud but convenient on PC)
+    path: list 
+        A path that we want to highlight on the initial graph (as asked)
+    eng: str
+        Allow to change directly in the call the engine used to render the graph (more convenient than changing it into the function)
+    col: str
+        Allow to change the color of the highlight (just a cosmetic add)
+    
+    Outputs:
+    dot: graphviz.graphs.Digraph
+        It may be useful later but it's not essential
+    '''
 
-    dot.render().replace('\\', '/', view=popup)
-    return dot
 
+    dot = gph.Digraph('Initial_graph', comment='Initial graph',engine=eng)
 
-def path_render(graph, path, popup=False):
-    '''Will build a graphviz graph and highlight a defined path upon'''
-
-    dot = gph.Digraph('Highlighted_graph', comment='Initial graph with path highlighted')
-
-    for i in graph.nodes():
+    for i in graph.nodes:
         if i in path:
-            dot.nodes(str(i), color = 'green')
+            dot.node(str(i), color = col)
         else:
-            dot.nodes(str(i))
+            dot.node(str(i))
     
     viewed = []
-    for k in graph.keys():
-        for n in graph[k]:
-            if n not in viewed:
-                if k and n in path:
-                    dot.edge(str(k),str(n),color='green')
+    
+    for k in list(graph.graph.keys()):
+        for n in graph.graph[k]:
+            if n[0] not in viewed:
+                if k and n[0] in path:
+                    dot.edge(str(k),str(n[0]),color=col,dir="none")
                 else:  
-                    dot.edge(str(k),str(n))
-            viewed.append(n)
+                    dot.edge(str(k),str(n[0]),dir="none")
+            viewed.append(n[0])
         viewed.append(k)
-
-    dot.render().replace('\\', '/', view=popup)
-
+    dot.render(view=popup).replace('\\', '/')
+    print(type(dot))
+    return dot
