@@ -1,8 +1,12 @@
 
-from graph import Graph, graph_from_file
+from graph import Graph, graph_render, time_measure
 
 data_path = "input/"
 file_name = "network.01.in"
 
-g = graph_from_file(data_path + file_name)
-print(g)
+#g = Graph.graph_from_file(data_path + file_name)
+g1 = Graph.graph_from_file("input/network.00.in")
+#print(g)
+
+#graph_render(g1,path=[9,8,1,2,3,4,10])
+time_measure(graph_render(g1,path=[9,8,1,2,3,4,10]))
