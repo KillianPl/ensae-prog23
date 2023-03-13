@@ -62,7 +62,6 @@ class Graph:
             power of the agent
         """
         # recursive Deep First Search
-        # does not return optimal path
         seen = {} # edge (a, b) : True
         def rec_path(position):
             if position == dest: 
@@ -79,24 +78,7 @@ class Graph:
                         if not(p is None):
                             p.append(position) 
                             return p
-        print(rec_path(src))
-        return rec_path(src) #list had been constructed backwards because of recursion
-
-        # Seance 1 Question 3:
-        # TIME COMPLEXITY: 
-        # n : number of nodes ; m : number of edges
-        # checking if a node has been seen is O(1) in a dictionary
-        # for each edge we check if the other end has been seen, each edge = 2 checks in total at most
-        # Worst case scenario : each node is checked once, each edge is checked twice 
-        # (e.g. graph having form 1 -- 2 -- ... -- n )
-        # thus we have time complexity O(n + m) 
-        #
-        # SPACE COMPLEXITY:
-        # max recursion depth is n
-        # dictionary lenght is n
-        # returned list has max length n if there's a path
-        # thus we have space complexity O(n)
-
+            return rec_path(src) #list had been constructed backwards because of recursion
 
 
     def get_optimal_path_with_power(self, src, dest, power):
