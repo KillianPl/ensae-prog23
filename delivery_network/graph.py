@@ -62,24 +62,27 @@ class Graph:
         power: numeric (int or float)
             power of the agent
         """
-        # recursive Deep First Search
+        # Deep First Search through recursion
+
         seen = {} # edge (a, b) : True
+
         def rec_path(position):
-            if position == dest: 
-                return [dest]
+            if position == src: 
+                return [src]
 
             neighbors = self.graph[position]
             # Moving to neighboors
             for n in neighbors:  # n = (node tag, power, dist)
                 if (position, n[0]) not in seen:
-                    seen[(position, n[0])] = True
-                    seen[(n[0], position)] = True
-                    if n[1] < power: # moving through only admissible paths
+                    seen[(position, n[0])] = True 
+                    seen[(n[0], position)] = True 
+                    if n[1] <= power: # moving through only admissible paths
                         p = rec_path(n[0]) 
                         if not(p is None):
                             p.append(position) 
                             return p
-            return rec_path(src) #list had been constructed backwards because of recursion
+        return rec_path(dest)
+
 
 
     def get_optimal_path_with_power(self, src, dest, power):
@@ -131,9 +134,12 @@ class Graph:
                 if d < dmin:
                     best_path = reversed(admissible_paths[1])
             return best_path
-        # Same complexity O(n + m) but it's always worst case scenario
-        # because to verifiy if we have the optimal path,
-        # it's necessary to go through all nodes and all paths
+
+
+
+
+
+
 
     def connected_components(self): 
         """
