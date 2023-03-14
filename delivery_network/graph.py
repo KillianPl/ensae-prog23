@@ -307,9 +307,10 @@ class Graph:
             if not (connected[node_b] == connected[node_a]): # equality check of pointers
                 G.add_edge(node_a, node_b, p, d)
                 for node_c in connected[node_b]: # none of the nodes connected to b were connected to a
-                    connected[node_a].append[node_c]
+                    connected[node_a].append(node_c)
                     connected[node_c] = connected[node_a] # pointers
-                    # changing connected[a] will thus update it automatically for all nodes in the connected component
+                    # changing connected[a] will thus update it automatically 
+                    # for all nodes in the connected component
         return G
         
          
@@ -347,7 +348,7 @@ class Graph:
             if len(ar) == 4: # distance specified
                  G.add_edge(int(ar[0]), int(ar[1]), ar[2], ar[3])
             elif len(ar) == 3: # not specified
-                G.add_edge(ar[0], ar[1], ar[2], 1)
+                G.add_edge(int(ar[0]), int(ar[1]), ar[2], 1)
         graphe.close()
         return G
-
+    
