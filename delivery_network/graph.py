@@ -59,6 +59,12 @@ class Graph:
             Second end (node) of the edge
         power: numeric (int or float)
             power of the agent
+
+        Output
+        ----------
+        path : list[int]
+            Sequence of nodes leading from src to dest through edges
+            whose power is less than that of the agent
         """
         # Deep First Search through recursion
 
@@ -79,7 +85,8 @@ class Graph:
                         if not(p is None):
                             p.append(position) 
                             return p
-        return rec_path(dest)
+        path = rec_path(dest)
+        return path
 
 
     def get_optimal_path_with_power(self, src, dest, power):
@@ -134,13 +141,18 @@ class Graph:
 
     def connected_components(self): 
         """
-        Returns the connected components in the form of a list of lists, 
-        each one being a connected component    
+        Returns the connected components of the graph in the form 
+        of a list of lists.  
         
+        Output
+        -----------
+        list_of_components : list[list[int]]
+            Each sublist represents a connected component
         """
-        seen = {n: False for n in self.nodes}
-        #seen = [(n, False) for n in self.nodes]
+        
+        seen = {n: False for n in self.nodes} 
         list_of_components = []
+
         for a in self.nodes:
             if not seen[a]:
                 seen[a] = True
@@ -185,7 +197,7 @@ class Graph:
         dest: NodeType
             The destination node
         
-        Outputs:
+        Output:
         --------
         """
         #Solution 1: djikstra with power >= 0, 
@@ -271,7 +283,8 @@ class Graph:
 
 
 def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
-    '''Transform our initial graph as a graphviz friendly one
+    """
+    Transform our initial graph as a graphviz friendly one
     and then print it. In addition, we are able to highlight a path upon the graph and "popup" will allow to manage
     if the render is automatically opened
     
@@ -280,19 +293,19 @@ def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     graph: Graph (class defined earlier)
         It's the graph we want to work on
     popup: bool
-        Allow to control if the render in immediately opened (not so relevant on sspcloud but convenient on PC)
+        Whether graphic result pops up
     path: list 
-        A path that we want to highlight on the initial graph (as asked)
+        contains
     eng: str
-        Allow to change directly in the call the engine used to render the graph (more convenient than changing it into the function)
+        Choice of engine used to render the graph 
     col: str
-        Allow to change the color of the highlight (just a cosmetic add)
+        color of the highlighted path
     
-    Outputs:
+    Output
+    ----------
     dot: graphviz.graphs.Digraph
-        It may be useful later but it's not essential
-    '''
-
+    """
+    # (Output may be useful later but it's not essential)
 
     dot = gph.Digraph('Initial_graph', comment='Initial graph',engine=eng)
 
