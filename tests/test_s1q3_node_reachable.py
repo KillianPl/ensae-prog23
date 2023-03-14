@@ -17,7 +17,6 @@ class Test_Reachability(unittest.TestCase):
         self.assertIn(g.get_path_with_power(1, 2, 11), [[1, 2], [1, 4, 3, 2]])
         self.assertEqual(g.get_path_with_power(1, 2, 5), [1, 4, 3, 2])
     
-    #added tests
 
 if __name__ == '__main__':
     unittest.main()
