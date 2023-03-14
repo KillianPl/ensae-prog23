@@ -234,7 +234,7 @@ class Graph:
 
         """
         # Idea :
-        # determine set of all possible powers in edges sorting it
+        # determine set of all possible powers in edges, sorting it,
         # then doing dichotomic research with get_path_with_power which has linear complexity
         # Complexity is O(E + Elog(E) + Vlog(p)) = O((E+V)log(V)) 
         # p : number of distinct powers, p = O(V)
