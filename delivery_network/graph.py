@@ -271,6 +271,46 @@ class Graph:
             Returns the index of the edge with minimal power in the list edges 
             """
 
+
+    def kruskal(self):
+        """
+        À faire 
+        ne sera un arbre que si le graphe d'origine est connexe
+        """
+        
+        # constructing list of (power, edge)
+        # edge having format (p, a, b, distance)
+        # without repetition 
+        edges_seen = {} #to check repetition
+        p_edges = []
+        for a in self.nodes:
+            for b in self.graph[a]: 
+                b0, p, d = b
+                if not (a, b0 in edges_seen):
+                    edges_seen[a, b0] = True
+                    edges_seen[b0, a] = True # to not add it again when on node b0
+                    p_edges.append(p, a, b0, d)
+
+        # sorting in place on powers
+        p_edges.sort(key=lambda a : a[0]) 
+
+        #constructing the graph based on Kruskal algorithm
+        G = Graph(self.nodes)
+        connected = {(n, {}) for n in self.nodes} #to identify accessible nodes from n
+        for edge in p_edges:
+            p, a, b, d = edge
+            if not (b in connected[a]): 
+                G.add_edge(a, b, p, d)
+                # updating connected nodes 
+                for c in connected[b]:
+                    for d in connected[a]:
+                        connected[c][d] = True
+                        connected[d][c] = True
+                connected[a][b] = True  # were not included in loop 
+                connected[b][a] = True 
+        return G
+        
+         
     # no 'self' in args of method
     @staticmethod 
     def graph_from_file(filename):
