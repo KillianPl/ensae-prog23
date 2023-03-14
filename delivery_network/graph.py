@@ -314,18 +314,18 @@ class Graph:
 
 def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     """
-    Transform our initial graph as a graphviz friendly one
-    and then print it. In addition, we are able to highlight a path upon the graph and "popup" will allow to manage
-    if the render is automatically opened
+    Vizualises of a graph and optionally a path in that graph.
+    Result is printed or put in a new window.
     
     Parameters:
     -----------
-    graph: Graph (class defined earlier)
-        It's the graph we want to work on
+    graph: Graph
+        main object of class Graph 
     popup: bool
-        Whether graphic result pops up
+        Choose whether graphic rendering pops up in a new window or not
     path: list 
-        contains
+        Contains sequence of nodes forming a path from a source to a destination.
+        It is assumed that the path is valid i.e. nodes and edges on that path exist.
     eng: str
         Choice of engine used to render the graph 
     col: str
@@ -335,8 +335,8 @@ def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     ----------
     dot: graphviz.graphs.Digraph
     """
-    # (Output may be useful later but it's not essential)
-
+    # Transforms graph as a graphviz friendly one
+    # output is useless to us
     dot = gph.Digraph('Initial_graph', comment='Initial graph',engine=eng)
 
     for i in graph.nodes:
