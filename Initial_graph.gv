@@ -1,22 +1,22 @@
 // Initial graph
 digraph Initial_graph {
-	1 [color=green]
-	2 [color=green]
-	3 [color=green]
-	4 [color=green]
+	1
+	2
+	3
+	4
 	5
 	6
 	7
-	8 [color=green]
-	9 [color=green]
-	10 [color=green]
-	1 -> 2 [color=green dir=none]
+	8
+	9
+	10
+	1 -> 2 [dir=none]
 	1 -> 6 [dir=none]
-	1 -> 8 [color=green dir=none]
-	2 -> 3 [color=green dir=none]
+	1 -> 8 [dir=none]
+	2 -> 3 [dir=none]
 	2 -> 5 [dir=none]
-	3 -> 4 [color=green dir=none]
-	4 -> 10 [color=green dir=none]
+	3 -> 4 [dir=none]
+	4 -> 10 [dir=none]
 	5 -> 7 [dir=none]
-	8 -> 9 [color=green dir=none]
+	8 -> 9 [dir=none]
 }

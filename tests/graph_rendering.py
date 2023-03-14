@@ -1,7 +1,10 @@
 import sys 
+
 sys.path.append("delivery_network/")
 
 from graph import Graph
+import graphviz as gph
+
 
 def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     """
@@ -51,9 +54,6 @@ def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     dot.render(view=popup).replace('\\', '/')
     print(type(dot))
     return dot
-
-
-
 
 g = Graph.graph_from_file("input/network.00.in")
 
