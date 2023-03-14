@@ -274,40 +274,42 @@ class Graph:
 
     def kruskal(self):
         """
-        À faire 
-        ne sera un arbre que si le graphe d'origine est connexe
+        Returns the minimal covering tree of the graph.
+        Construction uses Kruskal's algorithm.
+
+        Output
+        ---------
+        G : GraphType
         """
-        
-        # constructing list of (power, edge)
-        # edge having format (p, a, b, distance)
-        # without repetition 
+        # other idea is to create a subclass that inherits from Graph
+        #Tree would have attribute parents and descendants
+
+        # constructing list of (power, edge) without repetition
         edges_seen = {} #to check repetition
-        p_edges = []
-        for a in self.nodes:
-            for b in self.graph[a]: 
-                b0, p, d = b
-                if not (a, b0 in edges_seen):
-                    edges_seen[a, b0] = True
-                    edges_seen[b0, a] = True # to not add it again when on node b0
-                    p_edges.append(p, a, b0, d)
-
+        edges = []
+        for node_a in self.nodes:
+            for edge in self.graph[node_a]: 
+                node_b, p, d = edge
+                if not ((node_a, node_b) in edges_seen):
+                    edges_seen[(node_a, node_b)] = True
+                    edges_seen[(node_b, node_a)] = True # to not add it again when on node_b
+                    edges.append((node_a, node_b, p, d))
         # sorting in place on powers
-        p_edges.sort(key=lambda a : a[0]) 
+        edges.sort(key= lambda a : a[2]) 
 
-        #constructing the graph based on Kruskal algorithm
+        #constructing covering tree 
         G = Graph(self.nodes)
-        connected = {(n, {}) for n in self.nodes} #to identify accessible nodes from n
-        for edge in p_edges:
-            p, a, b, d = edge
-            if not (b in connected[a]): 
-                G.add_edge(a, b, p, d)
-                # updating connected nodes 
-                for c in connected[b]:
-                    for d in connected[a]:
-                        connected[c][d] = True
-                        connected[d][c] = True
-                connected[a][b] = True  # were not included in loop 
-                connected[b][a] = True 
+        connected = {n: [n] for n in self.nodes} #to identify accessible nodes from n
+        # using dictionary for O(1) check if two nodes are connected 
+        for edge in edges:
+            # loop invariant: connected[n] contains the connected component of node n at the end of each iteration
+            node_a, node_b, p, d = edge
+            if not (connected[node_b] == connected[node_a]): # equality check of pointers
+                G.add_edge(node_a, node_b, p, d)
+                for node_c in connected[node_b]: # none of the nodes connected to b were connected to a
+                    connected[node_a].append[node_c]
+                    connected[node_c] = connected[node_a] # pointers
+                    # changing connected[a] will thus update it automatically for all nodes in the connected component
         return G
         
          
