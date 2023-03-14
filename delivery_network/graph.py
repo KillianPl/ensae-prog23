@@ -45,7 +45,7 @@ class Graph:
         self.graph[node2].append((node1, power_min, dist))
         self.nb_edges += 1
 
-    
+
     def get_path_with_power(self, src, dest, power):
         """
         Returns an admissible path from src to dest with given power if possible
@@ -90,7 +90,8 @@ class Graph:
         return path
 
 
-    # def get_optimal_path_with_power(self, src, dest, power):
+    def get_optimal_path_with_power(self, src, dest, power):
+        
     #     """
     #     Returns the path from src to dest with given power
     #     and with lowest distance if possible, and None otherwise.
@@ -162,6 +163,8 @@ class Graph:
     #             if d < dmin:
     #                 best_path = reversed(admissible_paths[1])
     #         return best_path
+        return None
+
 
     def connected_components(self): 
         """
@@ -213,6 +216,7 @@ class Graph:
         """
         return set(map(frozenset, self.connected_components()))
 
+
     def min_power(self, src, dest):
         """
         Returns path from src to dest with minimal power and the associated power 
@@ -226,12 +230,10 @@ class Graph:
         
         Output:
         --------
+        path : 
+
         """
-        #Solution 1: djikstra with power >= 0, 
-        #           has too great space complexity O(n^2)
-        #           to memorize information about all nodes, isn't necessary
-        #           but time complexity is optimal with O(mlog(m))
-        #Solution 2: determine set of all possible powers in edges
+        #           determine set of all possible powers in edges
         #           sorting it
         #           then doing dichotomic research with get_path_with_power 
         #           Complexity is O(m + mlog(m) + nlog(p)) = O((n+m)log(m)) also
@@ -243,26 +245,28 @@ class Graph:
             for e in self.graph[n]:
                 powers.append(e[1])
 
-        powers = sorted(list(set(powers)))
-        print(powers)
+        powers = list(set(powers))
+        powers.sort()
+
         # Dichotomic research
         i = 0
         j = len(powers) - 1
         while i < j:
             if j == i+1:
-                if get_path_with_power(self, src, dest, powers[i]) is None:
+                if self.get_path_with_power(src, dest, powers[i]) is None:
                     i = j
                 else:
-                    return get_path_with_power(self, src, dest, powers[i]), powers[i]
+                    return self.get_path_with_power(src, dest, powers[i]), powers[i]
 
-            if get_path_with_power(self, src, dest, powers[(i+j)//2]) is None:
+            if self.get_path_with_power(src, dest, powers[(i+j)//2]) is None:
                 i = (i+j)//2
             else:
                 j = (i+j)//2
         
-        answer = get_path_with_power(self, src, dest, powers[i])
-        if not (answer is None):
-            return answer, powers[i]        
+        path = self.get_path_with_power(src, dest, powers[i])
+        if not (path is None):
+            return path, powers[i]
+              
             
 
     def pmin(edges):
