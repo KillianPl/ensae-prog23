@@ -92,7 +92,7 @@ class Graph:
     def get_optimal_path_with_power(self, src, dest, power):
         """
         Returns the path from src to dest with given power
-        and lowest distance if possible and returns None otherwise 
+        and with lowest distance if possible, and None otherwise.
 
         Parameters: 
         -----------
@@ -106,7 +106,9 @@ class Graph:
         Outputs:
         --------
         best_path: List
-            A list which contains the optimal path ordered from source to destination
+            Sequence of nodes leading from src to dest through edges
+            whose power is less than that of the agent and that 
+            minimises distance traveled.
         """
         seen = {(n, False) for n in self.nodes}
         admissible_paths = [] # will contain tuples (ditance, path)
@@ -147,35 +149,33 @@ class Graph:
         Output
         -----------
         list_of_components : list[list[int]]
-            Each sublist represents a connected component
+            Each sublist represents a connected component.
+            The sublist contains the tags of all nodes in the component
         """
-        
         seen = {n: False for n in self.nodes} 
         list_of_components = []
 
         for a in self.nodes:
-            if not seen[a]:
+            if not seen[a]: # if a wasn't seen, a belongs to a yet unseen connected component
                 seen[a] = True
-                connected_component = [a]
-                # heap of nodes to add is just neighboors
-                # because if they had been seen before, a would also have been seen
-                print(self.graph)
+                connected_component = [a] 
 
-                to_add = [] # remettre le zip
-                for b in self.graph[a]:
+                to_add = []
+                for b in self.graph[a]:# heap of nodes to add is just neighboors
                     to_add.append(b[0])
+                    # not necessary to check if seen as none of the nodes
+                    # in this connected component were seen (a would've also been otherwise)
+                
                 while to_add:
                     b = to_add.pop()
                     connected_component.append(b)
                     seen[b] = True
-                    for b_neighboor in self.graph[b]: #list(zip(*self.graph[b])[0]):
+                    for b_neighboor in self.graph[b]:
                         if not seen[b_neighboor[0]]:
                             # have to check if seen 
                             # (e.g. neighboor of b being neighboor of a already seen before)
                             to_add.append(b_neighboor[0])
                 list_of_components.append(connected_component)
-        # Complexity O(n) where n is the number of nodes
-        print(list_of_components)
         return list_of_components
 
 
