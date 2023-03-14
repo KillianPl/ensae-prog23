@@ -2,7 +2,6 @@ import graphviz as gph
 from time import perf_counter
 
 class Graph:
-
     def __init__(self, nodes=[]):
         self.nodes = nodes
         self.graph = dict([(n, []) for n in nodes]) # n1 -> (n2, power_min, distance)
@@ -46,8 +45,7 @@ class Graph:
         self.graph[node2].append((node1, power_min, dist))
         self.nb_edges += 1
 
-
-
+    
     def get_path_with_power(self, src, dest, power):
         """
         Returns an admissible path from src to dest with given power if possible
@@ -84,7 +82,6 @@ class Graph:
         return rec_path(dest)
 
 
-
     def get_optimal_path_with_power(self, src, dest, power):
         """
         Returns the path from src to dest with given power
@@ -117,7 +114,7 @@ class Graph:
             for n in neighbors:  # n : (node tag, power, dist)
                 if not seen[n[0]]:
                     seen[n[0]] = True 
-                    if n[1] < power: # moving through only admissible paths
+                    if n[1] <= power: # moving through only admissible paths
                         result = rec_path(n[0], dest)
                         if not(result is None):
                             partial_d, p = rec_path(dest, n[0]) 
@@ -134,12 +131,6 @@ class Graph:
                 if d < dmin:
                     best_path = reversed(admissible_paths[1])
             return best_path
-
-
-
-
-
-
 
     def connected_components(self): 
         """
@@ -183,10 +174,7 @@ class Graph:
         """
         return set(map(frozenset, self.connected_components()))
 
-
-
     def min_power(self, src, dest):
-
         """
         Returns path from src to dest with minimal power and the associated power 
 
@@ -203,7 +191,7 @@ class Graph:
         #Solution 1: djikstra with power >= 0, 
         #           has too great space complexity O(n^2)
         #           to memorize information about all nodes, isn't necessary
-        #           but time complixity is optimal with O(mlog(m))
+        #           but time complexity is optimal with O(mlog(m))
         #Solution 2: determine set of all possible powers in edges
         #           sorting it
         #           then doing dichotomic research with get_path_with_power 
@@ -212,15 +200,15 @@ class Graph:
         #                p : number of distinct powers, p = O(m)
         
         powers = []
-        for n in self.nodes :
-            print(self.graph[n])
-            edges_power = zip(self.graph[n])[2] #zip(*self.graph[n[0]])[2]
-            for p in edges_power:
-                powers.append(p)
-        powers = list(set(powers)).sort()
+        for n in self.nodes:
+            for e in self.graph[n]:
+                powers.append(e[1])
+
+        powers = sorted(list(set(powers)))
+        print(powers)
         # Dichotomic research
         i = 0
-        j = len(powers)-1
+        j = len(powers) - 1
         while i < j:
             if j == i+1:
                 if get_path_with_power(self, src, dest, powers[i]) is None:
@@ -236,10 +224,9 @@ class Graph:
         answer = get_path_with_power(self, src, dest, powers[i])
         if not (answer is None):
             return answer, powers[i]        
-        
-        
+            
 
-        def pmin(edges):
+    def pmin(edges):
             """
             Returns the index of the edge with minimal power in the list edges 
             """
@@ -268,9 +255,7 @@ class Graph:
 
         graphe = open(filename, "r")
         first_line = graphe.readline().split(" ") #first line: number of nodes, number of edges
-        # assert len(nm) == 2 "wrong format of text file" test à implémenter 
         n = int(first_line[0])
-        # assert isinstance(n, int) "wrong format of text file" test à implémenter
         G = Graph(list(range(1, n+1))) #initialization of graph
 
         E = graphe.readlines() 
@@ -333,9 +318,8 @@ def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     return dot
 
 def time_measure(function):
-    '''
-    This function allows us to measure in an easier way our program's performances by printing the elapsed time during 
-    function's work
+    """
+    This function allows us to measure in an easier way our program's performances by printing the elapsed time during function's work
 
     Parameters:
     -----------
@@ -345,8 +329,8 @@ def time_measure(function):
     Outputs:
     --------
     None
-    '''
+    """
     s = perf_counter()
-    function
+    function()
     e = perf_counter()
-    print("Your function was performed in",e-s,"s")
+    print(f"Your function was performed in{e-s}s")
