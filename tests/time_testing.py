@@ -24,22 +24,28 @@ class Test_ExecutionTime(unittest.TestCase):
         print(f"Function min_power took {end-start:.4f} seconds to run on graph from network.10 ")
 
     def test_temps(self):
-        for i in range(4):
-            g = Graph.graph_from_file(f"input/network.0{i}.in")
-            V = g.nb_nodes
-            start = perf_counter()
-            g.min_power(1, g.nodes[-1])
-            end = perf_counter()
-            print(f"It would take roughly {(V*(V-1)//2)*(end-start):.4f} seconds to compute min_power for all paths from network.0{i} ") # number of choices of 2 nodes among V is V*(V-1)//2
 
-        for i in range(4, 11):
-            g = Graph.graph_from_file(f"input/network.{i}.in")
-            V = g.nb_nodes
+        #smaller graphs, less routes
+        g = Graph.graph_from_file(f"input/network.01.in")
+        with open(f"input/routes.1.in") as route:
             start = perf_counter()
-            g.min_power(1, g.nodes[-1])
+            for path in route.readlines(): # readlines works as a generator
+                node_a, node_b, utility = path.rstrip().split(" ")
+                g.min_power(node_a, node_b)
             end = perf_counter()
-            duration = (end-start)/60/60/24/365
-            print(f"It would take roughly {int((V*(V-1)//2)*duration)} years to compute min_power for all paths from network.{i} (larger graph)") 
-        
+            print(f"It takes roughly {(end-start):.4f} seconds to compute min_power for all paths from routes.0{i} ")
+
+        for i in range(2, 11):
+            g = Graph.graph_from_file(f"input/network.{i}.in")
+            with open(f"input/routes.{i}.in") as route:
+                N = int(route.readline().rstrip())
+                start = perf_counter()
+                for _ in range(10):
+                    node_a, node_b, utility = route.readline().split(" ")
+                    g.min_power(node_a, node_b)
+                end = perf_counter()
+                duration = (end-start)/60/60/24/365
+                print(f"It would take roughly {(N//10)*duration} years to compute min_power for all paths from network.{i} (larger graph)") 
+            
 if __name__ == '__main__':
     unittest.main()
