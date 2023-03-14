@@ -297,7 +297,7 @@ class Graph:
         first_line = graphe.readline().split(" ") #first line: number of nodes, number of edges
         n = int(first_line[0])
         G = Graph(list(range(1, n+1))) #initialization of graph
-
+        
         E = graphe.readlines() 
         for edge in E: #filling G with specified edges
             edge = ''.join(edge.splitlines()) 
