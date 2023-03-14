@@ -33,7 +33,7 @@ class Test_ExecutionTime(unittest.TestCase):
                 node_a, node_b, utility = map(int, path.rstrip().split(" "))
                 g.min_power(node_a, node_b)
             end = perf_counter()
-            print(f"It takes roughly {(end-start):.4f} seconds to compute min_power for all paths from routes.1.in ")
+            print(f"It takes roughly {(end-start):.4f} seconds to compute min_power for all paths from routes.1.in (smaller graph) ")
 
     def test_temps_routes2(self):
         for i in range(2, 11):
@@ -41,15 +41,15 @@ class Test_ExecutionTime(unittest.TestCase):
             route = open(f"input/routes.{i}.in", 'r')
             N = int(route.readline().rstrip())
             start = perf_counter()
-            #for _ in range(5):
-            node_a, node_b, utility = map(int, route.readline().split(" "))
-            g.min_power(node_a, node_b)
+            for _ in range(5):
+                node_a, node_b, utility = map(int, route.readline().split(" "))
+                g.min_power(node_a, node_b)
             # probleme ici car pour i = 3 le code n'est pas interprété jusqu'ici
             # faire un autre test ne marche pas, il y a un pb avec la taille ?
             # erreur code=null
             end = perf_counter()
             duration = (end-start)/60/60
-            print(f"It would take roughly {N*duration} hours to compute min_power for all paths from network.{i} (larger graph)") 
+            print(f"It would take roughly {N/5*duration} hours to compute min_power for all paths from network.{i} (larger graph)") 
             route.close()
         
 if __name__ == '__main__':
