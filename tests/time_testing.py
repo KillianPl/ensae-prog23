@@ -23,14 +23,16 @@ class Test_ExecutionTime(unittest.TestCase):
         end = perf_counter()
         print(f"Function min_power took {end-start:.4f} seconds to run on graph from network.10 ")
 
-    def test_temps(self):
+    def test_temps_routes(self):
 
         #smaller graphs, less routes
-        g = Graph.graph_from_file(f"input/network.01.in")
+        g = Graph.graph_from_file(f"input/network.1.in")
         with open(f"input/routes.1.in") as route:
             start = perf_counter()
+            route.readline()
             for path in route.readlines(): # readlines works as a generator
                 node_a, node_b, utility = path.rstrip().split(" ")
+                print(node_a, node_b)
                 g.min_power(node_a, node_b)
             end = perf_counter()
             print(f"It takes roughly {(end-start):.4f} seconds to compute min_power for all paths from routes.0{i} ")
