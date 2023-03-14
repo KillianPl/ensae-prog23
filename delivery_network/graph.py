@@ -49,7 +49,8 @@ class Graph:
     def get_path_with_power(self, src, dest, power):
         """
         Returns an admissible path from src to dest with given power if possible
-        and returns None otherwise. Return path isn't necessarily optimal.
+        and returns None otherwise. 
+        Returned path isn't necessarily optimal in the sense of distance;
 
         Parameters: 
         -----------
@@ -64,7 +65,7 @@ class Graph:
         ----------
         path : list[int]
             Sequence of nodes leading from src to dest through edges
-            whose power is less than that of the agent
+            whose power is less than that of the agent.
         """
         # Deep First Search through recursion
 
@@ -89,57 +90,78 @@ class Graph:
         return path
 
 
-    def get_optimal_path_with_power(self, src, dest, power):
-        """
-        Returns the path from src to dest with given power
-        and with lowest distance if possible, and None otherwise.
+    # def get_optimal_path_with_power(self, src, dest, power):
+    #     """
+    #     Returns the path from src to dest with given power
+    #     and with lowest distance if possible, and None otherwise.
 
-        Parameters: 
-        -----------
-        src: NodeType
-            First end (node) of the edge
-        dest: NodeType
-            Second end (node) of the edge
-        power: numeric (int or float)
-            power of the agent
+    #     Parameters: 
+    #     -----------
+    #     src: NodeType
+    #         First end (node) of the edge
+    #     dest: NodeType
+    #         Second end (node) of the edge
+    #     power: numeric (int or float)
+    #         power of the agent
         
-        Outputs:
-        --------
-        best_path: List
-            Sequence of nodes leading from src to dest through edges
-            whose power is less than that of the agent and that 
-            minimises distance traveled.
-        """
-        seen = {(n, False) for n in self.nodes}
-        admissible_paths = [] # will contain tuples (ditance, path)
+    #     Outputs:
+    #     --------
+    #     best_path: List
+    #         Sequence of nodes leading from src to dest through edges
+    #         whose power is less than that of the agent and that 
+    #         minimises distance traveled.
+    #     """
+    #     # Deep First Search through recursion
+    #     seen = {} # format: edge (a, b) : True
+    #     admissible_paths = [] 
+        
+    #     def rec_path(position, d): # keeping track of distance by passing it though args
+    #         if position == src: 
+    #             return [src], 0
 
-        def rec_path(d, position): #memorising distance by passing it to args
-            neighbors = self.graph[position]
+    #         neighbors = self.graph[position]
+    #         for n in neighbors:  # n = (node tag, power, dist)
+    #             if (position, n[0]) not in seen:
+    #                 seen[(position, n[0])] = True 
+    #                 seen[(n[0], position)] = True 
+    #                 if n[1] <= power: # moving through only admissible paths
+    #                     p, d2 = rec_path(n[0], d +) 
+    #                     if not(p is None):
+    #                         p.append(position) 
+    #                         return p
+    #     path = rec_path(dest)
 
-            if position == dest:
-                return 0, [dest]
+    #     return 
+    #     seen = {(n, False) for n in self.nodes}
+    #     admissible_paths = [] # will contain tuples (ditance, path)
 
-             # Moving to neighboors
-            for n in neighbors:  # n : (node tag, power, dist)
-                if not seen[n[0]]:
-                    seen[n[0]] = True 
-                    if n[1] <= power: # moving through only admissible paths
-                        result = rec_path(n[0], dest)
-                        if not(result is None):
-                            partial_d, p = rec_path(dest, n[0]) 
-                            p.append(position) 
-                            if position == src: # end of path, no recursion
-                                admissible_paths.append(n[2] + partial_d, p)
-                            else:
-                                return n[2] + partial_d, p
-        rec_path(src, 0)
-        if admissible_paths:
-            best_path = []
-            dmin = admissible_paths[0][0]
-            for d, path in admissible_paths:
-                if d < dmin:
-                    best_path = reversed(admissible_paths[1])
-            return best_path
+    #     def rec_path(d, position): #memorising distance by passing it to args
+    #         neighbors = self.graph[position]
+
+    #         if position == dest:
+    #             return 0, [dest]
+
+    #          # Moving to neighboors
+    #         for n in neighbors:  # n : (node tag, power, dist)
+    #             if not seen[n[0]]:
+    #                 seen[n[0]] = True 
+    #                 if n[1] <= power: # moving through only admissible paths
+    #                     result = rec_path(n[0], dest)
+    #                     if not(result is None):
+    #                         partial_d, p = rec_path(dest, n[0]) 
+    #                         p.append(position) 
+    #                         if position == src: # end of path, no recursion
+    #                             admissible_paths.append(n[2] + partial_d, p)
+    #                         else:
+    #                             return n[2] + partial_d, p
+    #     rec_path(src, 0)
+    #     if admissible_paths:
+    #         best_path = []
+    #         dmin = admissible_paths[0][0]
+    #         for d, path in admissible_paths:
+    #             if d < dmin:
+    #                 best_path = reversed(admissible_paths[1])
+    #         return best_path
 
     def connected_components(self): 
         """
@@ -163,7 +185,7 @@ class Graph:
                 to_add = []
                 for b in self.graph[a]:# heap of nodes to add is just neighboors
                     to_add.append(b[0])
-                    # not necessary to check if seen as none of the nodes
+                    # not necessary to check if seen, as none of the nodes
                     # in this connected component were seen (a would've also been otherwise)
                 
                 while to_add:
@@ -181,8 +203,13 @@ class Graph:
 
     def connected_components_set(self):
         """
-        The result should be a set of frozensets (one per component), 
-        For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
+        Returns the connected components of a graph 
+
+        Output: 
+        ----------
+        Type set[frozenset[int]]
+            set of connected component, 
+            each being represented as a frozen set
         """
         return set(map(frozenset, self.connected_components()))
 
