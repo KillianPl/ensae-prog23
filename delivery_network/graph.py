@@ -1,6 +1,6 @@
 import graphviz as gph
 from time import perf_counter
-
+import numpy as np
 class Graph:
     def __init__(self, nodes=[]):
         self.nodes = nodes
@@ -265,8 +265,6 @@ class Graph:
         path = self.get_path_with_power(src, dest, powers[i])
         if not (path is None):
             return path, powers[i]
-              
-            
 
     def pmin(edges):
             """
