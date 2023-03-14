@@ -29,8 +29,7 @@ def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
     ----------
     dot: graphviz.graphs.Digraph
     """
-    # Transforms graph as a graphviz friendly one
-    # output is useless to us
+    # Transforms graph as a graphviz friendly one and renders it
 
     dot = gph.Digraph('Initial_graph', comment='Initial graph', engine=eng)
 
@@ -52,10 +51,10 @@ def graph_render(graph, popup = False, path=[], eng="sfdp", col="green"):
             viewed.append(n[0])
         viewed.append(k)
     dot.render(view=popup).replace('\\', '/')
-    print(type(dot))
-    return dot
+    # print(type(dot))
+    # return dot
 
-g = Graph.graph_from_file("input/network.00.in")
 
 if __name__ == '__main__':
+    g = Graph.graph_from_file("input/network.00.in")
     graph_render(g)

@@ -301,7 +301,7 @@ class Graph:
         E = graphe.readlines() 
         for edge in E: #filling G with specified edges
             edge = ''.join(edge.splitlines()) 
-            ar =list(map(int, edge.split(" ")))
+            ar = list(map(float, edge.split(" ")))
             if len(ar) == 4: # distance specified
                  G.add_edge(ar[0], ar[1], ar[2], ar[3])
             elif len(ar) == 3: # not specified

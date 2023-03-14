@@ -23,5 +23,9 @@ class Test_GraphLoading(unittest.TestCase):
         print(g.graph)
         self.assertEqual(g.graph[1][0][2], 6)
 
+    def test_network10(self):
+        g = Graph.graph_from_file("input/network.10.in")
+        
+
 if __name__ == '__main__':
     unittest.main()
