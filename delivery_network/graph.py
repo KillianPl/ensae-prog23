@@ -313,7 +313,46 @@ class Graph:
                     # for all nodes in the connected component
         return G
         
-         
+    def get_path_with_power_covering_tree(self, src, dest, power):
+        """
+        Returns, if there is one, the only path from src to dest which only goes through
+        edged with power less than that passed in argument.
+        This function only works for trees.
+
+        Parameters: 
+        -----------
+        src: NodeType
+            First end (node) of the edge
+        dest: NodeType
+            Second end (node) of the edge
+        power: numeric (int or float)
+            power of the agent
+
+        Output
+        ----------
+        path : list[int]
+            Sequence of nodes leading from src to dest through edges
+            whose power is less than that of the agent.
+        """
+        # Recursive Deep First Search
+        # unlike with a graph, we can just check the nodes
+        seen = {} # node : True
+        def rec_path(position):
+            if position == src:
+                return [src]            
+            #checking neighbors
+            for edge in self.graph[position]:
+                node_b, p, d = edge
+                if p < power:
+                    if node_b not in seen:
+                        seen[node_b] = True
+                        path = rec_path(node_b)
+                        if path is not None:
+                            path.append(position)
+                            return path
+
+
+
     # no 'self' in args of method
     @staticmethod 
     def graph_from_file(filename):
@@ -351,4 +390,3 @@ class Graph:
                 G.add_edge(int(ar[0]), int(ar[1]), ar[2], 1)
         graphe.close()
         return G
-    
