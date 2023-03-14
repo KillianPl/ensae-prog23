@@ -233,12 +233,11 @@ class Graph:
         path : 
 
         """
-        #           determine set of all possible powers in edges
-        #           sorting it
-        #           then doing dichotomic research with get_path_with_power 
-        #           Complexity is O(m + mlog(m) + nlog(p)) = O((n+m)log(m)) also
-        #           with n : number of nodes ; m : number of edges
-        #                p : number of distinct powers, p = O(m)
+        # Idea :
+        # determine set of all possible powers in edges sorting it
+        # then doing dichotomic research with get_path_with_power which has linear complexity
+        # Complexity is O(E + Elog(E) + Vlog(p)) = O((E+V)log(V)) 
+        # p : number of distinct powers, p = O(V)
         
         powers = []
         for n in self.nodes:

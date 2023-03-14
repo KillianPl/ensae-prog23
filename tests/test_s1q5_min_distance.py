@@ -12,8 +12,5 @@ class Test_min_distance(unittest.TestCase): # TEST DE LA QUESTION 5
         self.assertEqual(g.get_optimal_path_with_power(1, 4, 11), [1, 2, 3, 4])
         self.assertEqual(g.get_optimal_path_with_power(1, 4, 10), None)
 
-    
-
-
 if __name__ == '__main__':
     unittest.main()
