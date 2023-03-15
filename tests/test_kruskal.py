@@ -1,12 +1,12 @@
-# This will work if ran from the root folder.
 import sys 
 sys.path.append("delivery_network")
+sys.setrecursionlimit(1_000_000)
 
-from graph import Graph
 from time import perf_counter
-import unittest   # The test framework
+import unittest 
+from graph import Graph
 
-#kruskal works but is too slow
+
 class Test_Kruskal(unittest.TestCase):
     def test_network0(self):
         g = Graph.graph_from_file("input/network.00.in")
@@ -23,7 +23,14 @@ class Test_Kruskal(unittest.TestCase):
             if K.graph[n] != g.graph[n]:
                 self.assertFalse
         self.assertTrue
-        
+    
+    def test_efficiency(self):
+        start = perf_counter()
+        g = Graph.graph_from_file("input/network.10.in")
+        end = perf_counter()
+        print(f"L'implémentation de l'algorithme de Kruskal prend {end - start:4f} sur le graph de network.10.in.")
+
+
 
 if __name__ == '__main__':
     unittest.main()

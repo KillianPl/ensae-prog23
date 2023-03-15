@@ -311,6 +311,9 @@ class Graph:
                     connected[node_c] = connected[node_a] # pointers
                     # changing connected[a] will thus update it automatically 
                     # for all nodes in the connected component
+                    
+            if G.nb_edges() == G.nb_nodes()-1: # optionnal
+                break # trees of size V have exactly V-1 edges : if it is reached, construction's over.
         return G
         
     def min_power_tree(self, src, dest):
@@ -341,22 +344,23 @@ class Graph:
             Minimal power necessary to go from src to dest
         """
         # Recursive Deep First Search
-        # unlike with a graph, we can just check the nodes
+        # unlike with a graph, we can just check nodes
+
         seen = {} # node : True
-        def rec_path(position, min_p):
+        def rec_path(position, min_p): #keeping track of the minimal power on the path
             if position == src:
-                return [src], 0           
+                return [src], 0       
             #checking neighbors
             for edge in self.graph[position]:
                 node_b, p, _ = edge
-                if p < power:
-                    if node_b not in seen:
-                        seen[node_b] = True
-                        result = = rec_path(node_b)
-                        if result is not None:
-                            path, p_min = result
+                if node_b not in seen:
+                    seen[node_b] = True
+                    result = rec_path(node_b, min(p, min_p))
+                    if result is not None:
+                            path, p_min = result # p_min <= p necessary
                             path.append(position)
-                            return path, max(p_min, p)
+                            return path, p_min
+        return rec_path(dest, 0)
 
     # no 'self' in args of method
     @staticmethod 
@@ -395,3 +399,6 @@ class Graph:
                 G.add_edge(int(ar[0]), int(ar[1]), ar[2], 1)
         graphe.close()
         return G
+
+
+
