@@ -339,12 +339,14 @@ class Graph:
         Output
         ----------
         tupple(list[NodeType], float) | NoneType
-        path : 
-            Sequence of nodes leading from src to dest through edges
-            whose power is less than that of the agent.
+        
+        with
+                path : 
+                    Sequence of nodes leading from src to dest through edges
+                    whose power is less than that of the agent.
 
-        power : float
-            Minimal power necessary to go from src to dest
+                power : float
+                    Minimal power necessary to go from src to dest
         """
         # Recursive Deep First Search
         # unlike with a graph, we can just check nodes
