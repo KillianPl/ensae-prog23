@@ -254,26 +254,27 @@ class Graph:
         i = 0
         j = len(powers) - 1
         while i < j:
-            if j == i+1:
-                if self.get_path_with_power(src, dest, powers[i]) is None:
+            if j == i+1: # because of //2 
+                result_i = self.get_path_with_power(src, dest, powers[i])
+                if result_i is None: #minimal power is at least powers[j]
                     i = j
-                else:
-                    return self.get_path_with_power(src, dest, powers[i]), powers[i]
-
-            if self.get_path_with_power(src, dest, powers[(i+j)//2]) is None:
+                else: 
+                    return result_i
+            #moving lower bound
+            if self.get_path_with_power(src, dest, powers[(i+j)//2]) is None: 
                 i = (i+j)//2
+            #moving upper bound
             else:
                 j = (i+j)//2
-        
+
         path = self.get_path_with_power(src, dest, powers[i])
         if not (path is None):
             return path, powers[i]
 
     def pmin(edges):
             """
-            Returns the index of the edge with minimal power in the list edges 
+            Returns the index of the edge with minimal power in the list edges
             """
-
 
     def kruskal(self):
         """
