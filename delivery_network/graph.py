@@ -304,7 +304,7 @@ class Graph:
         for edge in edges:
             # loop invariant: connected[n] contains the connected component of node n at the end of each iteration
             node_a, node_b, p, d = edge
-            if not (connected[node_b] == connected[node_a]): # equality check of pointers
+            if not (connected[node_b][0] == connected[node_a][0]):
                 G.add_edge(node_a, node_b, p, d)
                 for node_c in connected[node_b]: # none of the nodes connected to b were connected to a
                     connected[node_a].append(node_c)
