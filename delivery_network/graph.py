@@ -259,7 +259,7 @@ class Graph:
                 if result_i is None: #minimal power is at least powers[j]
                     i = j
                 else: 
-                    return result_i
+                    return result_i, powers[i]
             #moving lower bound
             if self.get_path_with_power(src, dest, powers[(i+j)//2]) is None: 
                 i = (i+j)//2
