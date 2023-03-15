@@ -313,11 +313,15 @@ class Graph:
                     # for all nodes in the connected component
         return G
         
-    def get_path_with_power_covering_tree(self, src, dest, power):
+    def min_power_tree(self, src, dest):
         """
-        Returns, if there is one, the only path from src to dest which only goes through
-        edged with power less than that passed in argument.
-        This function only works for trees.
+        Returns, if there is one, the only path from src to dest in a tree and the minimal
+        power necessary to cross it.
+        By construction of the minimal covering tree, the power is 
+        the smallest one needed to go from src to dest
+        It is assumed the function is being applied on a minimal covering tree,
+        e.g. the output of the kruskal function
+        
 
         Parameters: 
         -----------
@@ -325,33 +329,34 @@ class Graph:
             First end (node) of the edge
         dest: NodeType
             Second end (node) of the edge
-        power: numeric (int or float)
-            power of the agent
 
         Output
         ----------
-        path : list[int]
+        tupple(list[int], float) | NoneType
+        path : 
             Sequence of nodes leading from src to dest through edges
             whose power is less than that of the agent.
+
+        power : float
+            Minimal power necessary to go from src to dest
         """
         # Recursive Deep First Search
         # unlike with a graph, we can just check the nodes
         seen = {} # node : True
-        def rec_path(position):
+        def rec_path(position, min_p):
             if position == src:
-                return [src]            
+                return [src], 0           
             #checking neighbors
             for edge in self.graph[position]:
-                node_b, p, d = edge
+                node_b, p, _ = edge
                 if p < power:
                     if node_b not in seen:
                         seen[node_b] = True
-                        path = rec_path(node_b)
-                        if path is not None:
+                        result = = rec_path(node_b)
+                        if result is not None:
+                            path, p_min = result
                             path.append(position)
-                            return path
-
-
+                            return path, max(p_min, p)
 
     # no 'self' in args of method
     @staticmethod 
@@ -383,7 +388,7 @@ class Graph:
         E = graphe.readlines() 
         for edge in E: #filling G with specified edges
             edge = ''.join(edge.splitlines()) 
-            ar = list(map(float, edge.split(" "))) # format : node_a, node_b, power, distance
+            ar = list(map(float, edge.split(" "))) # format : node_a, node_b, power, distance (optional)
             if len(ar) == 4: # distance specified
                  G.add_edge(int(ar[0]), int(ar[1]), ar[2], ar[3])
             elif len(ar) == 3: # not specified

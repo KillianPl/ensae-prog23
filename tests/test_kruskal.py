@@ -24,5 +24,6 @@ class Test_Kruskal(unittest.TestCase):
                 self.assertFalse
         self.assertTrue
         
+
 if __name__ == '__main__':
     unittest.main()
