@@ -219,7 +219,8 @@ class Graph:
 
     def min_power(self, src, dest):
         """
-        Returns path from src to dest with minimal power and the associated power 
+        Returns path from src to dest with minimal power and the associated power when there is one
+        Returns None otherwise
 
         Parameters:
         -----------
@@ -228,24 +229,26 @@ class Graph:
         dest: NodeType
             The destination node
         
-        Output:
+        Output: 
         --------
-        path : 
+        tupple(list[Nodetype], float)  | NoneType
+                    
+        with
+                path : list[Nodetype]
+                    Sequence of nodes leading from src to dest through edges
+                    whose power is less than that of the agent.
 
+                power : float
+                    Minimal power necessary to go from src to dest
         """
-        # Idea :
-        # determine set of all possible powers in edges, sorting it,
-        # then doing dichotomic research with get_path_with_power which has linear complexity
-        # Complexity is O(E + Elog(E) + Vlog(p)) = O((E+V)log(V)) 
-        # p : number of distinct powers, p = O(V)
-        
-        powers = []
+        #constructing list of distinct powers
+        powers = [] 
         for n in self.nodes:
             for e in self.graph[n]:
                 powers.append(e[1])
 
         powers = list(set(powers))
-        powers.sort()
+        powers.sort() #in place
 
         # Dichotomic research
         i = 0
@@ -279,7 +282,7 @@ class Graph:
 
         Output
         ---------
-        G : GraphType
+        G : Graph
         """
         # other idea is to create a subclass that inherits from Graph
         #Tree would have attribute parents and descendants
@@ -335,7 +338,7 @@ class Graph:
 
         Output
         ----------
-        tupple(list[int], float) | NoneType
+        tupple(list[NodeType], float) | NoneType
         path : 
             Sequence of nodes leading from src to dest through edges
             whose power is less than that of the agent.
