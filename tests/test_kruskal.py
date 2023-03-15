@@ -28,7 +28,7 @@ class Test_Kruskal(unittest.TestCase):
         start = perf_counter()
         g = Graph.graph_from_file("input/network.10.in")
         end = perf_counter()
-        print(f"L'implémentation de l'algorithme de Kruskal prend {end - start:4f} sur le graph de network.10.in.")
+        print(f"Implémentation of Kruskal's algorithm {end - start:4f}seconds on graph from network.10.in.")
 
 
 

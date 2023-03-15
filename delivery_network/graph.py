@@ -316,7 +316,7 @@ class Graph:
                     # changing connected[a] will thus update it automatically 
                     # for all nodes in the connected component
                     
-            if G.nb_edges() == G.nb_nodes()-1: # optionnal
+            if G.nb_edges == G.nb_nodes - 1: # optionnal
                 break # trees of size V have exactly V-1 edges : if it is reached, construction's over.
         return G
         
