@@ -63,7 +63,7 @@ class Graph:
 
         Output
         ----------
-        path : list[int]
+        path : list[NodeType]
             Sequence of nodes leading from src to dest through edges
             whose power is less than that of the agent.
         """
@@ -132,7 +132,7 @@ class Graph:
 
         Output: 
         ----------
-        Type set[frozenset[int]]
+        Type set[frozenset[NodeType]]
             set of connected component, 
             each being represented as a frozen set
         """
