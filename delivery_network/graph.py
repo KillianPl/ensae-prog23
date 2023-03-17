@@ -255,9 +255,9 @@ class Graph:
         Parameters: 
         -----------
         src: NodeType
-            First end (node) of the edge
+            source node
         dest: NodeType
-            Second end (node) of the edge
+            destination node
 
         Output
         ----------
@@ -372,9 +372,17 @@ class Graph:
 
     def min_power_optimised(self, src, dest):
         """
-        à faire
-        """
+        Computes the minimal covering tree of the graph and then finds paths
+        with minimal power from src to dest when there is one.
+
+        Parameters
+        ----------
         
+        src: NodeType
+            Source node
+        dest: NodeType
+            Destination Node
+        """
         G = self.kruskal()
         parents, depths = G.build_tree()
 
