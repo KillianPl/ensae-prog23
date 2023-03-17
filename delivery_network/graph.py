@@ -383,19 +383,38 @@ class Graph:
         dest: NodeType
             Destination Node
         """
-        G = self.kruskal()
-        parents, depths = G.build_tree()
-
+        G = self.kruskal() #covering tree graph
+        parents, depths = G.build_tree() # tree structure
+        #building path from src to root 
         path_src = [(src, 0)]
         for i in range(depths[src]):
             next_parent, p = parents[path1[i]]
             path_src.append(next_parent, max(p, path_src[i][1]))
-        
+        #building path from dest to root 
         path_dest = [(dest, 0)]
         for i in range(depths[dest]):
             next_parent, p = parents[path1[i]]
             path_dest.append(next_parent, max(p, path_dest[i][1]))
+        # finding lowest common ancestor
+        while path_dest and path_src and path_src[-1]==path_dest[-1]:
+            ancestor, p = path_src.pop()
+            path_dest.pop()
 
+        if not path_src: #if src was on the path from dest to root
+            path_src.append(ancestor, p) #ancestor is necessarily src
+        elif not path_dest:#if dest was on the path from src to root
+            path_src.append(ancestor, p)#ancestor is necessarily dest
+        final_path = path_src.copy()
+        min_p = path_src[0]
+        for _, p in path_src:
+            if p < min_p:
+                min_p = p
+        for node, p in path_dest[::-1]:
+            final_path.append(node)
+            if p < min_p:
+                min_p = p
+
+        return final_path, p
 
         
 
