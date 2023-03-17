@@ -83,7 +83,7 @@ class Graph:
                     seen[(n[0], position)] = True 
                     if n[1] <= power: # moving through only admissible paths
                         p = rec_path(n[0]) 
-                        if not(p is None):
+                        if p:
                             p.append(position) 
                             return p
         path = rec_path(dest)
@@ -178,19 +178,19 @@ class Graph:
         while i < j:
             if j == i+1: # because of //2 
                 result_i = self.get_path_with_power(src, dest, powers[i])
-                if result_i is None: #minimal power is at least powers[j]
+                if result_i: #minimal power is at least powers[j]
                     i = j
                 else: 
                     return result_i, powers[i]
             #moving lower bound
-            if self.get_path_with_power(src, dest, powers[(i+j)//2]) is None: 
+            if self.get_path_with_power(src, dest, powers[(i+j)//2]): 
                 i = (i+j)//2
             #moving upper bound
             else:
                 j = (i+j)//2
 
         path = self.get_path_with_power(src, dest, powers[i])
-        if not (path is None):
+        if path:
             return path, powers[i]
 
     def pmin(edges):
@@ -284,7 +284,7 @@ class Graph:
                 if node_b not in seen:
                     seen[node_b] = True
                     result = rec_path(node_b, min(p, min_p))
-                    if result is not None:
+                    if result:
                             path, p_min = result # p_min <= p necessary
                             path.append(position)
                             return path, p_min
@@ -328,5 +328,67 @@ class Graph:
         graphe.close()
         return G
 
+    def build_tree(self):
+        """
+        Takes a graph with the structure of a minimal covering tree, as provided
+        by the kruskal function, and returns a tree structure organizing it.
 
 
+        Output
+        --------
+        tupple(dict[NodeType : (NodeType, float)], dict[Nodetype : int], NodeType)
+        with
+            parents : dict[NodeType : (NodeType, float)]
+                To each node associates: (parent, power) where power is the 
+                By convention, a root is its' own parent. 
+                There can be multiple roots, e.g. graphs with two connex components
+
+            depth: dict[Nodetype : int]
+                To each node associates corresponding depth in the tree
+        """
+        #choosing the root : edge with max nb_edges
+        # for now we assume there is only one connected component
+        # and thus one root. 
+        # Other case can be dealt with a loop over connected components
+        # and using this function on each 
+        root = self.nodes[0]
+        max_edges = len(self.graphe[root])
+        for n in self.nodes():
+            n_edges = len(self.graph[n])
+            if n_edges > max_edges:
+                max_edges = n_edges
+                root = n            
+        # Deep first search 
+        parents = {root:(root, 0, 0)}
+        depths = {root:0}
+        position = [root]
+        def dfs(position):
+            for node, p, d in self.graph[position]:
+                if node != parent[position]:
+                    parents[node] = (parent, p)
+                    depths[node] = depths[parent]+1
+                    dfs(node)           
+        return parents, depths
+
+    def min_power_optimised(self, src, dest):
+        """
+        à faire
+        """
+        
+        G = self.kruskal()
+        parents, depths = G.build_tree()
+
+        path_src = [(src, 0)]
+        for i in range(depths[src]):
+            next_parent, p = parents[path1[i]]
+            path_src.append(next_parent, max(p, path_src[i][1]))
+        
+        path_dest = [(dest, 0)]
+        for i in range(depths[dest]):
+            next_parent, p = parents[path1[i]]
+            path_dest.append(next_parent, max(p, path_dest[i][1]))
+
+
+        
+
+        
