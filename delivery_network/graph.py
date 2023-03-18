@@ -372,8 +372,9 @@ class Graph:
 
     def min_power_optimised(self, src, dest):
         """
-        Computes the minimal covering tree of the graph and then finds paths
-        with minimal power from src to dest when there is one.
+        Computes the minimal covering tree of the graph through kruskal's
+        algorithm and then finds path with minimal power from src 
+        to dest when there is one.
 
         Parameters
         ----------
@@ -382,6 +383,18 @@ class Graph:
             Source node
         dest: NodeType
             Destination Node
+
+        Output
+        ----------
+        tupple(list[NodeType], float) | NoneType
+        
+        with
+                path : 
+                    Sequence of nodes leading from src to dest through edges
+                    whose power is less than that of the agent.
+
+                power : float
+                    Minimal power necessary to go from src to dest
         """
         G = self.kruskal() #covering tree graph
         parents, depths = G.build_tree() # tree structure
