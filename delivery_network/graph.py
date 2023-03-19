@@ -412,21 +412,16 @@ class Graph:
         while path_dest and path_src and path_src[-1]==path_dest[-1]:
             ancestor, p = path_src.pop()
             path_dest.pop()
-
-        if not path_src: #if src was on the path from dest to root
-            path_src.append(ancestor, p) #ancestor is necessarily src
-        elif not path_dest:#if dest was on the path from src to root
-            path_src.append(ancestor, p)#ancestor is necessarily dest
-        final_path = path_src.copy()
-        min_p = path_src[0]
-        for _, p in path_src:
-            if p < min_p:
-                min_p = p
-        for node, p in path_dest[::-1]:
+        #lowest common ancestor was removed, it has to be put back
+        path_src.append(ancestor, p)
+        #joining the paths
+        final_path = path_src # (name change)
+        min_p = min(final_path, key= lambda X: X[1])
+        for node, p in reversed(path_dest): # adding the dest end of the path
             final_path.append(node)
             if p < min_p:
                 min_p = p
-
+                
         return final_path, p
 
         
