@@ -24,5 +24,5 @@ def recuit_simule():
 
 
 
-if __name__ == """main""":
+if __name__ == '___main___':
     main()

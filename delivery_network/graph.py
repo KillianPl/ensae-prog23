@@ -433,3 +433,7 @@ class Graph:
     # enfin, méth. finale : Recuit simulé et algorithmes génétiques
 
 
+
+
+if __name__ == "___main___":
+    main()
