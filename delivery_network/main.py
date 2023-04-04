@@ -10,3 +10,20 @@ g1 = Graph.graph_from_file("input/network.00.in")
 
 #graph_render(g1,path=[9,8,1,2,3,4,10])
 time_measure(graph_render(g1,path=[9,8,1,2,3,4,10]))
+
+def calcul_utilite(graphe, route):
+    
+
+
+def recuit_simule():
+
+    #choix initial random
+
+
+
+
+
+
+
+if __name__ == """main""":
+    main()

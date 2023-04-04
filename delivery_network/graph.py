@@ -430,9 +430,6 @@ class Graph:
     # plan : 
     # brute force sac a dos
     # si il y a le temps : Monte Carlo
-    # enfin, méth. finale : Recuit simulé et algorithme génétiques
-    
-
-
+    # enfin, méth. finale : Recuit simulé et algorithmes génétiques
 
 
