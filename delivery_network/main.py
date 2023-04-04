@@ -12,13 +12,12 @@ g1 = Graph.graph_from_file("input/network.00.in")
 time_measure(graph_render(g1,path=[9,8,1,2,3,4,10]))
 
 def calcul_utilite(graphe, route):
-    
+    return None
 
 
 def recuit_simule():
-
     #choix initial random
-
+    return None 
 
 
 
