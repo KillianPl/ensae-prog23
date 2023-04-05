@@ -165,9 +165,9 @@ def route_proccessing(i, trucks, filewrite=False):
         
         Optionally if filewrite is True, 
         writes a file named routes.processed.i.in  with format:
-            Each line is of the form 'a b powermin utility cost utility/cost'
-            where powermin, utility, cost are integers
-            and a, b are node tags.
+            Each line is of the form 'a b power utility cost utility/cost'
+            where power is that of the truck paired to the route.
+            power, utility, cost are integers ; a, b are node tags.
 
         Parameters: 
         -----------
@@ -182,8 +182,7 @@ def route_proccessing(i, trucks, filewrite=False):
         -----------
             routes : list[NodeType, NodeType, int, int, float]
                 Each tupple in the list indicates in order: the two nodes of the path,
-                the minimal power necessary, the utility gained from it and the ratio of
-                utility/cost
+                the power of the truck, the cost of the truck, the utility gained from the path and the ratio of utility/cost
     """
     n_trucks = len(trucks)
     routes = []
@@ -195,7 +194,7 @@ def route_proccessing(i, trucks, filewrite=False):
             ind = bisect.bisect_right(trucks, pmin)
             if ind < n_trucks-1: # route with too great power necessary
                 cost = trucks[ind][1]
-                routes.append(a, b, pmin, utility, cost, utility/cost)
+                routes.append(a, b, trucks[ind][0], utility, cost, utility/cost)
     #sorting on ratio utility cost
     routes.sort(key=lambda x : x[5])
     if filewrite:
@@ -206,9 +205,29 @@ def route_proccessing(i, trucks, filewrite=False):
     return routes
 
 
-def simulated_annealing(i, trucks, routes):
+def simulated_annealing(trucks, routes):
     """
-    cf explication
+    Implements a simulated annealing heuristic to maximize utility.
+
+    Parameters
+    -------------
+      trucks : list[(int, int)]
+        List of useful trucks sorted in decreasing order of both power and cost
+        Entries are tuples representing in order: (power, cost)
+
+      routes : list[NodeType, NodeType, int, int, float]
+                Each tupple in the list indicates in order: the two nodes of the path,
+                the minimal power necessary, the utility gained from it and the ratio of
+                utility/cost. It is sorted in ascending utility/cost
+
+    Output
+    -----------
+      chosen_routes: list[NodeType, NodeType, int, int, float]
+          Represents the choice of routes giving the maximum utility among 
+          those explored. Each route is associated to an unique truck by its cost.
+
+        
+
     """
 
 
@@ -222,4 +241,3 @@ def simulated_annealing(i, trucks, routes):
 
 if __name__ == '___main___':
     main()
->>>>>>> 95ceefc273f265f5323497b1579153475fccbcdc
