@@ -386,10 +386,10 @@ class Graph:
 
         Output
         ----------
-        tupple(list[NodeType], float) | NoneType
+        (path, power) : list[NodeType], float) | NoneType
         
         with
-                path : 
+                path : list[NodeType]
                     Sequence of nodes leading from src to dest through edges
                     whose power is less than that of the agent.
 
