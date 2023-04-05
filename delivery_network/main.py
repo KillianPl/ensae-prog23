@@ -4,7 +4,7 @@ import collections as c
 import bisect
 import random
 import numpy as np
-
+import matplotlib.pyplot as plt
 data_path = "input/"
 file_name = "network.01.in"
 
@@ -247,7 +247,10 @@ def simulated_annealing(trucks, routes):
             pass
     
     def utility(road_choices):
-      return sum(road_choices.keys(), key= lambda x: x[3])
+      total = 0
+      for _, _, _, _, u, _ in road_choices:
+        total += u
+      return total    
 
     historique = []
     chosen_routes = best_chosen_routes.copy()
@@ -258,6 +261,7 @@ def simulated_annealing(trucks, routes):
         current_u = utility(chosen_routes)
         if current_u > max_utility:
             max_utility = current_u
+            best_chosen_routes = chosen_routes.copy()
 
         historique.append(current_u)
         # make the change in place
@@ -265,7 +269,7 @@ def simulated_annealing(trucks, routes):
         chosen_routes.pop(r_del)
         r_add = random.choice(routes)
         counter = 1
-        while counter < 100 and (r_add in chosen_routes or budget - r_add[3] < 0) :
+        while counter < 4 and (r_add in chosen_routes or budget - r_add[3] < 0) :
             r_add = random.choice(routes)
             counter += 1
         chosen_routes[r_add] = 1
@@ -283,12 +287,20 @@ def simulated_annealing(trucks, routes):
             chosen_routes[r_del] = 1
             chosen_routes.pop(r_add)
         T *= 0.9995
-      
-      # X = np.arrange(len(historique))
-      # plt.plot(X, historique)
-      # plt.show()
-    
 
+    N =len(historique)
+    X = np.arrange(N)
+    plt.plot(X, historique, linewidth = 1, color='blue')
+    plt.plot(X, np.ones(N)*max_utility, linewidth = 1, color='red')
+    font1 = {'family':'serif','color':'blue','size':20}
+    font2 = {'family':'serif','color':'red','size':20}
+    font2 = {'family':'serif','color':'red','size':20}
+    plt.xlabel("temps", fontdict = font1)
+    plt.ylabel("utility", fontdict = font2)
+    plt.title("Exploration of utility levels by simulated annealing")
+    plt.show()
+
+    return best_chosen_routes, max_utility
 
 if __name__ == '___main___':
     main()
