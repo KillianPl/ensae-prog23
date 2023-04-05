@@ -2,7 +2,8 @@
 from graph import Graph, graph_render, time_measure
 import collections as c
 import bisect
-import random as rd
+import random
+import numpy as np
 
 data_path = "input/"
 file_name = "network.01.in"
@@ -196,7 +197,7 @@ def route_proccessing(i, trucks, filewrite=False):
                 cost = trucks[ind][1]
                 routes.append(a, b, trucks[ind][0], utility, cost, utility/cost)
     #sorting on ratio utility cost
-    routes.sort(key=lambda x : x[5])
+    routes.sort(key=lambda x : x[5], reverse=True)
     if filewrite:
         processed = open(f"input/routes.processed.{i}.out", 'w')
         for a, b, pmin, utility, cost, u_c in routes:
@@ -217,26 +218,76 @@ def simulated_annealing(trucks, routes):
 
       routes : list[NodeType, NodeType, int, int, float]
                 Each tupple in the list indicates in order: the two nodes of the path,
-                the minimal power necessary, the utility gained from it and the ratio of
-                utility/cost. It is sorted in ascending utility/cost
+                the power of the associated truck, its' cost, the utility gained from the path
+                 and the ratio of utility/cost. It is sorted in descending utility/cost
 
     Output
     -----------
-      chosen_routes: list[NodeType, NodeType, int, int, float]
+      best_chosen_routes: list[NodeType, NodeType, int, int, float]
           Represents the choice of routes giving the maximum utility among 
           those explored. Each route is associated to an unique truck by its cost.
-
-        
-
+      utility: int
+          The maximum utility observed during exploration
     """
-
-
+    # choosing an inital point,
+    # can be random or deterministic 
+    # here we start from a greedy approach
     budget = 25 * 10**9
-    while budget > min_cost:
+    best_chosen_routes = {}
+    max_utility = 0
+    min_cost = routes[-1][3]
+    for path in routes:
+        a, b, power, cost, utility, u_c = path
+        if cost < budget:
+            best_chosen_routes[path] = 1
+            budget -= cost
+        if budget < min_cost:
+            break
+        else:
+            pass
     
+    def utility(road_choices):
+      return sum(road_choices.keys(), key= lambda x: x[3])
 
+    historique = []
+    chosen_routes = best_chosen_routes.copy()
+    T = 10**6 #Temperature
+    K_activation = 100 # hyperparameter constant
 
+    while T > 10**-4:
+        current_u = utility(chosen_routes)
+        if current_u > max_utility:
+            max_utility = current_u
 
+        historique.append(current_u)
+        # make the change in place
+        r_del = random.choice(chosen_routes.keys())
+        chosen_routes.pop(r_del)
+        r_add = random.choice(routes)
+        counter = 1
+        while counter < 100 and (r_add in chosen_routes or budget - r_add[3] < 0) :
+            r_add = random.choice(routes)
+            counter += 1
+        chosen_routes[r_add] = 1
+        neighbor_u = utility(chosen_routes)
+        delta_u = neighbor_u - current_u
+        if delta_u > 0:
+            # change is accepted
+            budget -= r_add[3]
+            budget += r_del[3]
+        elif rand() < np.exp(K_activation * delta_u / T):
+            budget -= r_add[3]
+            budget += r_del[3]
+        else:
+            #reverse change
+            chosen_routes[r_del] = 1
+            chosen_routes.pop(r_add)
+        T *= 0.9995
+      
+      # X = np.arrange(len(historique))
+      # plt.plot(X, historique)
+      # plt.show()
+    
 
 
 if __name__ == '___main___':
