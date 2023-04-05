@@ -29,7 +29,7 @@ class Test_ExecutionTime(unittest.TestCase):
             print(f"It takes roughly {temps:4f} seconds to compute min_power for all paths from routes.1.in (smaller graph) ")
 
     def test_temps_routes2(self):
-        for i in range(2,3):
+        for i in range(2,11):
             g = Graph.graph_from_file(f"input/network.{i}.in").kruskal()
             route = open(f"input/routes.{i}.in", 'r')
             N = int(route.readline().rstrip())
