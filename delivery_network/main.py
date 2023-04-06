@@ -15,94 +15,6 @@ g1 = Graph.graph_from_file("input/network.00.in")
 #time_measure(graph_render(g1,path=[9,8,1,2,3,4,10]))
 
 
-# def import_camion(nom_fichier):
-#   fichier = open(nom_fichier,'r')
-#   fligne = fichier.readline.split(" ")
-#   Cam = (int(fligne[0]),[])
-
-#   E = fichier.readlines():
-#   for ligne in E:
-#     ligne = ''.join(ligne.splitlines())
-#     Cam[1].append([ligne[0],ligne[1]])
-  
-#   return Cam
-
-# def import_route(nom_fichier): # let us have a useable format for roads
-#     list_route = []
-
-#     with open(f"input/routes.1.in") as route:
-#       temps = 0
-#       route.readline()
-#       for path in route.readlines(): # readlines works as a generator
-#         node_a, node_b, utility = map(int, path.rstrip().split(" "))
-#         list_route.append([node_a,node_b,utility])
-
-#       return list_route
-
-# def route_synth(nom_fichier,graph): # synthetise roads as a minimal power and a cost
-#     route_init = import_route(nom_fichier)
-#     synth = []
-#     for route in route_init:
-#         min_pow = graph.min_optimised(route[0],route[1])[1]
-#         synth.append([min_pow, route[2],(route[0],route[1])])
-#     return synth
-
-# def order(ilist, composante=0, type = "asc"): # default is 0 ie power
-#     if not ilist[:,composante]: 
-#         return ilist[:,composante] # empty sequence case
-
-#     pivot = ilist[:,composante][random.choice(range(0, len(truck_list[:,component])))]
-
-#     head = order([x for x in ilist if x[composante] < pivot])
-#     tail = order([x for x in ilist if x[composante] > pivot])
-
-  
-#     return head + [x for x in ilist if x[composante] == pivot] + tail
-
-# def camion_opti(truck_list, pow, utility):
-#     p = utility - truck_list[0][1] ; m = 0
-#     for i in range( len(truck_list)):
-#         if truck_list[i][0] >= pow:
-#             np = utility - truck_list[i][1]
-#             if (np) > p:
-#                 m = i
-#                 p = np
-      
-#     return [m , truck_list[m], p]
-
-
-# def profit(routes, truck_list, graph):  #routes au format route_synth
-#   truck_list = order(truck_list)
-#   profits = []
-#   for route in routes:  # format : "avec camion i, on fait profit p entre a et b"
-#       i, data, p = camion_opti(truck_list, route[0])
-#       profits.append([i, p , route[2]])
-#   return profits
-
-
-# def sac_glouton(fichier_route,fichier_graph,fichier_camions):
-#     budget = 25*10**9
-#     graph = graph_from_file(fichier_graph)
-
-#     truck_list = import_camion(fichier_camions)
-#     truck_list = order(truck_list,0)
-
-#     routes = route_synth(fichier_route, graph)
-#     routes = order(routes, 0)
-
-#     profits = profit(routes,truck_list,graph)
-#     profits = order(profits,1)
-
-#     commande_camions = {i : [0,[]] for i in range(len(truck_list))}
-
-#     for camion in profit: 
-#       """on parcours la liste des profits triée par ordre décroissant et on ajoute 
-#       le parcours tant qu'on a le budget pour le camion"""
-#         if budget == 0:
-#           return commande_camions
-#     if budget - camion[1]>=0:
-#         commande_camions[i][0] += 1
-#         commande_camions[i][1].append(camion[2])
 
 
 def truck_from_file(i):
@@ -269,7 +181,7 @@ def simulated_annealing(trucks, routes):
     best_chosen_routes = {}
     max_utility = 0
     min_cost = routes[-1][3]
-    for path in routes:
+    for path in reversed(routes):
         a, b, power, cost, utility, u_c = path
         if cost < budget:
             best_chosen_routes[path] = 1
@@ -288,38 +200,43 @@ def simulated_annealing(trucks, routes):
     historique = []
     chosen_routes = best_chosen_routes.copy()
     T = 10**6 #Temperature
-    K_activation = 10000 # hyperparameter constant
+    K_activation = 10**3 # hyperparameter constant
+    current_u = utility(chosen_routes)
 
-    while T > 10**-4:
-        current_u = utility(chosen_routes)
+    while T > 10**2:
+        
         if current_u > max_utility:
             max_utility = current_u
             best_chosen_routes = chosen_routes.copy()
+        # trying neighbouring situations
 
-        historique.append(current_u)
-        # make the change in place
-        r_del = random.choice(list(chosen_routes.keys()))
-        chosen_routes.pop(r_del)
-        r_add = random.choice(routes)
+        # first trying for ameliorations when there are ones
         counter = 1
-        while counter < 4 and (r_add in chosen_routes or budget - r_add[3] < 0) :
-            r_add = random.choice(routes)
+        while counter < 3: #three tries to improve 
+            r_change = random.choice(routes)
+            delta_u = 0
+            if r_change not in chosen_routes:
+                if budget - r_change[3] > 0:
+                    chosen_routes[r_change] = 1
+                    budget -= r_change[3]
+                    delta_u = r_change[4]
+            current_u += delta_u
+            historique.append(current_u)
             counter += 1
-        chosen_routes[r_add] = 1
-        neighbor_u = utility(chosen_routes)
-        delta_u = neighbor_u - current_u
-        if delta_u > 0:
-            # change is accepted
-            budget -= r_add[3]
-            budget += r_del[3]
-        elif random.random() < np.exp(K_activation * delta_u / T):
-            budget -= r_add[3]
-            budget += r_del[3]
+
+        chosen_routes.pop(r_change)
+        delta_u = -r_change[4]
+        # accepting locally to lower utility
+        if random.random() < np.exp( delta_u /(K_activation * T)):
+            budget += r_change[3]
         else:
             #reverse change
-            chosen_routes[r_del] = 1
-            chosen_routes.pop(r_add)
-        T *= 0.9995
+            delta_u = 0
+            chosen_routes[r_change] = 1
+
+        current_u += delta_u
+        historique.append(current_u)
+        T *= 0.995
 
     N =len(historique)
     X = np.arange(N)
@@ -356,8 +273,8 @@ plt.plot(X, historique, linewidth = 1, color='blue')
 plt.plot(X, np.ones(N)*max_utility, linewidth = 1, color='red')
 font1 = {'family':'serif','color':'blue','size':20}
 font2 = {'family':'serif','color':'red','size':20}
-font2 = {'family':'serif','color':'red','size':20}
+font3 = {'family':'serif','color':'purple','size':16}
 plt.xlabel("temps", fontdict = font1)
 plt.ylabel("utility", fontdict = font2)
-plt.title("Exploration of utility levels by simulated annealing")
+plt.title("Exploration of utility levels by simulated annealing", fontdict=font3)
 plt.savefig('image.pdf')
