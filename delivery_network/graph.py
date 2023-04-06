@@ -428,15 +428,3 @@ class Graph:
 
 
 
-
-    # DÉBUT séance 4-6
-    # plan : 
-    # brute force sac a dos
-    # si il y a le temps : Monte Carlo
-    # enfin, méth. finale : Recuit simulé et algorithmes génétiques
-
-
-
-
-if __name__ == "___main___":
-    main()
