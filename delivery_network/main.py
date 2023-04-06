@@ -223,7 +223,7 @@ def route_out(i):
 
         Output
         ---------
-            None
+            NoneType
     """
 
     G = Graph.graph_from_file(f"input/network.{i}.in").kruskal()
