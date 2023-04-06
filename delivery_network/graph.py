@@ -171,27 +171,23 @@ class Graph:
 
         powers = list(set(powers))
         powers.sort() #in place
-
         # Dichotomic research
         i = 0
         j = len(powers) - 1
         while i < j:
-            if j == i+1: # because of //2 
-                result_i = self.get_path_with_power(src, dest, powers[i])
-                if result_i is not None: #minimal power is at least powers[j]
-                    i = j
-                else: 
-                    return self.get_path_with_power(src, dest, powers[j]), powers[j]
-            #moving lower bound
-            if self.get_path_with_power(src, dest, powers[(i+j)//2]): 
-                i = (i+j)//2
-            #moving upper bound
-            else:
+            result_j = self.get_path_with_power(src, dest, powers[j])
+            if result_j is None:
+                return None
+            result_midway = self.get_path_with_power(src, dest, powers[(i+j)//2])
+            if result_midway is not None:
                 j = (i+j)//2
-
-        path = self.get_path_with_power(src, dest, powers[i])
-        if path:
-            return path, powers[i]
+            else:
+                if j == i+1:
+                    i = j
+                else:
+                    i = (i+j)//2
+        return self.get_path_with_power(src, dest, powers[i]), powers[i]
+            
 
     def pmin(edges):
             """

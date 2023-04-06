@@ -233,7 +233,7 @@ def route_out(i):
         N = int(f.readline())
         output.write(f"N\n")
         for ligne in f.readlines():
-            a, b, utility = 
+            a, b, utility = e
 
         output.close()
 
