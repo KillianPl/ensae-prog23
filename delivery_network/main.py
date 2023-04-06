@@ -335,7 +335,7 @@ def simulated_annealing(trucks, routes):
 
     return best_chosen_routes, max_utility
 
-if __name__ == '___main___':
+if __name__ == '__main__':
     main()
 
 
