@@ -288,7 +288,7 @@ def simulated_annealing(trucks, routes):
     historique = []
     chosen_routes = best_chosen_routes.copy()
     T = 10**6 #Temperature
-    K_activation = 100 # hyperparameter constant
+    K_activation = 10000 # hyperparameter constant
 
     while T > 10**-4:
         current_u = utility(chosen_routes)
@@ -333,9 +333,9 @@ def simulated_annealing(trucks, routes):
     plt.title("Exploration of utility levels by simulated annealing")
     plt.show()
 
-    return best_chosen_routes, max_utility
+    return best_chosen_routes, max_utility, historique
 
-if __name__ == '__main__':
+if __name__ == '___main___':
     main()
 
 
@@ -344,5 +344,20 @@ if __name__ == '__main__':
 #print(route_proccessing(1, truck_from_file(1)))
 truck = truck_from_file(1)
 routes = route_proccessing(1, truck)
-print(simulated_annealing(truck, routes))
+# solution optimale pour les petits grapghe
+#print(simulated_annealing(truck, routes))
+#print(sum(r[4] for r in routes))
+_, max_utility, historique = simulated_annealing(truck, routes)
 
+
+N =len(historique)
+X = np.arange(N)
+plt.plot(X, historique, linewidth = 1, color='blue')
+plt.plot(X, np.ones(N)*max_utility, linewidth = 1, color='red')
+font1 = {'family':'serif','color':'blue','size':20}
+font2 = {'family':'serif','color':'red','size':20}
+font2 = {'family':'serif','color':'red','size':20}
+plt.xlabel("temps", fontdict = font1)
+plt.ylabel("utility", fontdict = font2)
+plt.title("Exploration of utility levels by simulated annealing")
+plt.savefig('image.pdf')
