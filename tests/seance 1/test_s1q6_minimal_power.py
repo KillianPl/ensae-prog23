@@ -3,7 +3,8 @@ import sys
 sys.path.append("delivery_network")
 
 from graph import Graph
-import unittest   # The test framework
+import unittest
+# The test framework
 
 class Test_MinimalPower(unittest.TestCase):
     def test_network0(self):
@@ -14,7 +15,7 @@ class Test_MinimalPower(unittest.TestCase):
     def test_network1(self):
         g = Graph.graph_from_file("input/network.04.in")
         self.assertEqual(g.min_power(1, 4)[1], 4)
-
+ 
     
 if __name__ == '__main__':
     unittest.main()

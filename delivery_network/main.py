@@ -225,8 +225,8 @@ def route_out(i):
         ---------
             None
     """
-    
-    G = Graph.graph_from_file(f"input/network.{i}.in").kruskal
+
+    G = Graph.graph_from_file(f"input/network.{i}.in").kruskal()
 
     with open(f"input/routes.{i}.in") as f:
         output = open(f"output/routes.{i}.out", 'w')

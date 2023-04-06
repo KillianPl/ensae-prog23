@@ -178,10 +178,10 @@ class Graph:
         while i < j:
             if j == i+1: # because of //2 
                 result_i = self.get_path_with_power(src, dest, powers[i])
-                if result_i: #minimal power is at least powers[j]
+                if result_i is not None: #minimal power is at least powers[j]
                     i = j
                 else: 
-                    return result_i, powers[i]
+                    return self.get_path_with_power(src, dest, powers[j]), powers[j]
             #moving lower bound
             if self.get_path_with_power(src, dest, powers[(i+j)//2]): 
                 i = (i+j)//2
