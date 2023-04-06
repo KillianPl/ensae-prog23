@@ -298,7 +298,7 @@ def simulated_annealing(trucks, routes):
 
         historique.append(current_u)
         # make the change in place
-        r_del = random.choice(chosen_routes.keys())
+        r_del = random.choice(list(chosen_routes.keys()))
         chosen_routes.pop(r_del)
         r_add = random.choice(routes)
         counter = 1
@@ -312,7 +312,7 @@ def simulated_annealing(trucks, routes):
             # change is accepted
             budget -= r_add[3]
             budget += r_del[3]
-        elif rand() < np.exp(K_activation * delta_u / T):
+        elif random.random() < np.exp(K_activation * delta_u / T):
             budget -= r_add[3]
             budget += r_del[3]
         else:
@@ -322,7 +322,7 @@ def simulated_annealing(trucks, routes):
         T *= 0.9995
 
     N =len(historique)
-    X = np.arrange(N)
+    X = np.arange(N)
     plt.plot(X, historique, linewidth = 1, color='blue')
     plt.plot(X, np.ones(N)*max_utility, linewidth = 1, color='red')
     font1 = {'family':'serif','color':'blue','size':20}
@@ -340,5 +340,9 @@ if __name__ == '___main___':
 
 
 #print(truck_from_file(1))
-route_out((1))
-print(route_proccessing(1, truck_from_file(1)))
+#route_out((1))
+#print(route_proccessing(1, truck_from_file(1)))
+truck = truck_from_file(1)
+routes = route_proccessing(1, truck)
+print(simulated_annealing(truck, routes))
+
