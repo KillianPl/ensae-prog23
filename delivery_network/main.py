@@ -340,7 +340,7 @@ if __name__ == '___main___':
 
 
 #print(truck_from_file(1))
-#route_out((1))
+
 #print(route_proccessing(1, truck_from_file(1)))
 truck = truck_from_file(1)
 routes = route_proccessing(1, truck)
