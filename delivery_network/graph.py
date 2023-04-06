@@ -269,7 +269,6 @@ class Graph:
         """
         # Recursive Deep First Search
         # unlike with a graph, we can just check nodes
-
         seen = {} # node : True
         def rec_path(position, min_p): #keeping track of the minimal power on the path
             if position == src:
