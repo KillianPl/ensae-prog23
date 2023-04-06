@@ -157,11 +157,6 @@ def truck_from_file(i):
     return trucks
 
 
-print(truck_from_file(2))
-
-
-
-
 def route_proccessing(i, trucks, filewrite=False):
     """
         Computes the cost of each route in routes.i.out and 
@@ -208,6 +203,39 @@ def route_proccessing(i, trucks, filewrite=False):
             processed.write(f"{a} {b} {pmin} {utility} {cost} {u_c}\n")
         processed.close()
     return routes
+
+
+def route_out(i):
+    """
+        Writes a file routes.i.out based on routes.i.in .
+        The first line of routes.i.in has format 'n' where n is the number of routes in the file
+        The n following lines should have format: 'Node1 Node2 utility'
+            with        utility  : int
+                    Node1, Node2 : Nodetype
+        Output file has the same first line, and the 
+        n following lines are in format 'Node1 Node2 utility power_min'
+            with       power_min : int
+
+        Parameters
+        ----------------
+            i : int
+                number of the file to convert
+
+        Output
+        ---------
+            None
+    """
+    
+    G = Graph.graph_from_file(f"input/network.{i}.in").kruskal
+
+    with open(f"input/routes.{i}.in") as f:
+        output = open(f"output/routes.{i}.out", 'w')
+        N = int(f.readline())
+        output.write(f"N\n")
+        for ligne in f.readlines():
+            a, b, utility = 
+
+        output.close()
 
 
 def simulated_annealing(trucks, routes):

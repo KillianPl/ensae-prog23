@@ -31,17 +31,17 @@ class Test_ExecutionTime(unittest.TestCase):
     def test_temps_routes2(self):
         for i in range(2,11):
             g = Graph.graph_from_file(f"input/network.{i}.in").kruskal()
-            route = open(f"input/routes.{i}.in", 'r')
-            N = int(route.readline().rstrip())
-            temps = 0
-            for _ in range(5):
-                node_a, node_b, utility = map(int, route.readline().split(" "))
-                start = perf_counter()
-                g.min_power_tree(node_a, node_b)
-                end = perf_counter()
-            duration = (end-start)/60
-            print(f"It would take roughly {N/5*duration:4f} mins to compute min_power for all paths from network.{i} (larger graph)") 
-            route.close()
+            with open(f"input/routes.{i}.in", 'r') as route:
+                N = int(route.readline().rstrip())
+                temps = 0
+                for _ in range(10):
+                    node_a, node_b, utility = map(int, route.readline().split(" "))
+                    start = perf_counter()
+                    g.min_power_tree(node_a, node_b)
+                    end = perf_counter()
+                duration = (end-start)/60
+                print(f"It would take roughly {(N/10)*duration:2f} mins to compute min_power for all paths from network.{i} (larger graph)") 
+                
 
     def test_temps_routes3(self):
         i=3
