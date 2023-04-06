@@ -191,8 +191,7 @@ def route_proccessing(i, trucks, filewrite=False):
         for line in readlines(): # readlines is a generator
             a, b, utility, pmin = map(int, line.split(" ").rstrip()) 
             # cost is the closest key, on the right
-            ind = bisect.bisect_right(trucks, pmin, key= lambda x:x[0])
-            print(ind)
+            ind = bisect.bisect_right(trucks, pmin)
             if ind < n_trucks-1: # route with too great power necessary
                 cost = trucks[ind][1]
                 routes.append(a, b, trucks[ind][0], utility, cost, utility/cost)
