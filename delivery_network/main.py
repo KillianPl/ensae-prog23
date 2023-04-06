@@ -180,7 +180,7 @@ def route_proccessing(i, trucks, filewrite=False):
 
         Outputs: 
         -----------
-            routes : list[NodeType, NodeType, int, int, float]
+            routes : list[NodeType, NodeType, int, int, int, float]
                 Each tupple in the list indicates in order: the two nodes of the path,
                 the power of the truck, the cost of the truck, the utility gained from the path and the ratio of utility/cost
     """
