@@ -186,12 +186,14 @@ def route_proccessing(i, trucks, filewrite=False):
     """
     n_trucks = len(trucks)
     routes = []
-    with open(f"input/routes.{i}.out", 'r'):
-        readline()
-        for line in readlines(): # readlines is a generator
-            a, b, utility, pmin = map(int, line.split(" ").rstrip()) 
+    with open(f"output/routes.{i}.out", 'r') as f:
+        f.readline()
+        for line in f.readlines(): # readlines is a generator
+            #print(line)
+            a, b, utility, pmin = map(int, line.split()) 
             # cost is the closest key, on the right
-            ind = bisect.bisect_right(trucks, pmin)
+            ind = bisect.bisect_right(trucks, pmin, key= lambda x:x[0])
+            print(ind)
             if ind < n_trucks-1: # route with too great power necessary
                 cost = trucks[ind][1]
                 routes.append(a, b, trucks[ind][0], utility, cost, utility/cost)
@@ -231,10 +233,11 @@ def route_out(i):
     with open(f"input/routes.{i}.in") as f:
         output = open(f"output/routes.{i}.out", 'w')
         N = int(f.readline())
-        output.write(f"N\n")
+        output.write(f"{N}\n")
         for ligne in f.readlines():
-            a, b, utility = e
-
+            a, b, utility = ligne.split()
+            power_min = int(G.min_power(int(a),int(b))[1])
+            output.write(a + " " + b + " " + utility + " " + str(power_min)+"\n")
         output.close()
 
 
@@ -336,3 +339,8 @@ def simulated_annealing(trucks, routes):
 
 if __name__ == '___main___':
     main()
+
+
+#print(truck_from_file(1))
+route_out((1))
+print(route_proccessing(1, truck_from_file(1)))
