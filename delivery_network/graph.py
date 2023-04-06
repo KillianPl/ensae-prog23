@@ -4,7 +4,7 @@ import numpy as np
 class Graph:
     def __init__(self, nodes=[]):
         self.nodes = nodes
-        self.graph = dict([(n, []) for n in nodes]) # n1 -> (n2, power_min, distance)
+        self.graph = dict([(n, []) for n in nodes]) # n1 -> (n2, power, distance)
         self.nb_nodes = len(nodes)
         self.nb_edges = 0
 
@@ -260,31 +260,39 @@ class Graph:
         tupple(list[NodeType], float) | NoneType
         
         with
-                path : 
+                final_path : 
                     Sequence of nodes leading from src to dest through edges
                     whose power is less than that of the agent.
 
-                power : float
+                min_p : float
                     Minimal power necessary to go from src to dest
         """
         # Recursive Deep First Search
         # unlike with a graph, we can just check nodes
         seen = {} # node : True
-        def rec_path(position, min_p): #keeping track of the minimal power on the path
+
+        def rec_path(position): #keeping track of the minimal power on the path
             if position == src:
-                return [src], 0       
+                return [(src, 0)]      
             #checking neighbors
             for edge in self.graph[position]:
-                node_b, p, _ = edge
+                node_b, power, _ = edge
                 if node_b not in seen:
                     seen[node_b] = True
-                    result = rec_path(node_b, min(p, min_p))
-                    if result:
-                            path, p_min = result # p_min <= p necessary
-                            path.append(position)
-                            return path, p_min
-        return rec_path(dest, 0)
+                    result = rec_path(node_b)
+                    if result is not None:
+                        result.append((position, power))
+                        return result
+        path = rec_path(dest)
+        min_p = 0
+        final_path = []
+        for node, p in path:
+            if p > min_p:
+                min_p = p
+            final_path.append(node)
+        return final_path, min_p
 
+    
     # no 'self' in args of method
     @staticmethod 
     def graph_from_file(filename):
@@ -347,8 +355,8 @@ class Graph:
         # Other case can be dealt with a loop over connected components
         # and using this function on each 
         root = self.nodes[0]
-        max_edges = len(self.graphe[root])
-        for n in self.nodes():
+        max_edges = len(self.graph[root])
+        for n in self.nodes:
             n_edges = len(self.graph[n])
             if n_edges > max_edges:
                 max_edges = n_edges
@@ -420,15 +428,3 @@ class Graph:
 
 
 
-
-    # DÉBUT séance 4-6
-    # plan : 
-    # brute force sac a dos
-    # si il y a le temps : Monte Carlo
-    # enfin, méth. finale : Recuit simulé et algorithmes génétiques
-
-
-
-
-if __name__ == "___main___":
-    main()
