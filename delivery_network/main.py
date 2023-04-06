@@ -194,7 +194,7 @@ def route_proccessing(i, trucks, filewrite=False):
             ind = bisect.bisect_right(trucks, pmin)
             if ind < n_trucks-1: # route with too great power necessary
                 cost = trucks[ind][1]
-                routes.append(a, b, trucks[ind][0], utility, cost, utility/cost)
+                routes.append((a, b, trucks[ind][0], utility, cost, utility/cost))
     #sorting on ratio utility cost
     routes.sort(key=lambda x : x[5], reverse=True)
     if filewrite:
