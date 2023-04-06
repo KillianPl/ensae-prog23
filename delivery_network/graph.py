@@ -292,7 +292,6 @@ class Graph:
             final_path.append(node)
         return final_path, min_p
 
-    
     # no 'self' in args of method
     @staticmethod 
     def graph_from_file(filename):
